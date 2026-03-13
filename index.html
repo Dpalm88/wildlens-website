@@ -946,45 +946,208 @@
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="contact-inner">
-    <div class="section-label">Contact</div>
-    <h2 class="section-title" style="margin-bottom:1rem;">Let's <em>Connect</em></h2>
-    <p class="contact-lead">Whether you're interested in a print, licensing an image, or planning a custom shoot — reach out. Every message is read personally.</p>
+  <div class="contact-inner" style="max-width:700px;">
+    <div class="section-label">Work With Me</div>
+    <h2 class="section-title" style="margin-bottom:1rem;">Let's <em>Shoot</em></h2>
+    <p class="contact-lead">Available for concert photography, sports events, and press credential requests. Based in Oregon — willing to travel. Every inquiry is read personally.</p>
 
-    <form class="contact-form" onsubmit="handleSubmit(event)">
+    <!-- Inquiry type tabs -->
+    <div style="display:flex; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap;">
+      <button class="filter-btn active" onclick="switchForm('hire', this)">Hire Me</button>
+      <button class="filter-btn" onclick="switchForm('press', this)">Press Pass Request</button>
+      <button class="filter-btn" onclick="switchForm('print', this)">Prints / Licensing</button>
+    </div>
+
+    <!-- HIRE FORM -->
+    <form id="form-hire" class="contact-form" action="https://formspree.io/f/meerzkap" method="POST">
+      <input type="hidden" name="inquiry_type" value="Hire — Concert / Sports Photography">
       <div class="form-row">
         <div class="form-field">
-          <label>First Name</label>
-          <input type="text" placeholder="Your name">
+          <label>Your Name *</label>
+          <input type="text" name="name" placeholder="Full name" required>
         </div>
         <div class="form-field">
-          <label>Email</label>
-          <input type="email" placeholder="your@email.com">
+          <label>Email *</label>
+          <input type="email" name="email" placeholder="your@email.com" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Phone</label>
+          <input type="tel" name="phone" placeholder="(503) 555-0000">
+        </div>
+        <div class="form-field">
+          <label>Event Type *</label>
+          <select name="event_type" required>
+            <option value="">Select type</option>
+            <option>Concert / Music Festival</option>
+            <option>Sports — Live Game</option>
+            <option>Sports — Action / Portrait</option>
+            <option>Corporate Event</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Event Name / Artist</label>
+          <input type="text" name="event_name" placeholder="e.g. Portland Trail Blazers vs Lakers">
+        </div>
+        <div class="form-field">
+          <label>Event Date</label>
+          <input type="date" name="event_date">
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Venue / Location</label>
+        <input type="text" name="venue" placeholder="e.g. Moda Center, Portland OR">
+      </div>
+      <div class="form-field">
+        <label>How will the photos be used?</label>
+        <select name="usage">
+          <option value="">Select usage</option>
+          <option>Editorial / Press</option>
+          <option>Social Media</option>
+          <option>Commercial / Advertising</option>
+          <option>Personal Use</option>
+          <option>Multiple / Other</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Budget Range</label>
+          <select name="budget">
+            <option value="">Select range</option>
+            <option>Under $300</option>
+            <option>$300 – $600</option>
+            <option>$600 – $1,000</option>
+            <option>$1,000+</option>
+            <option>Let's discuss</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Organization / Publication</label>
+          <input type="text" name="organization" placeholder="e.g. Portland Tribune, Self">
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Additional Details</label>
+        <textarea rows="4" name="message" placeholder="Anything else I should know — specific shots needed, access requirements, turnaround time..."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send Inquiry →</button>
+    </form>
+
+    <!-- PRESS PASS FORM -->
+    <form id="form-press" class="contact-form" action="https://formspree.io/f/meerzkap" method="POST" style="display:none;">
+      <input type="hidden" name="inquiry_type" value="Press Pass / Credential Request">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Your Name *</label>
+          <input type="text" name="name" placeholder="Full name" required>
+        </div>
+        <div class="form-field">
+          <label>Email *</label>
+          <input type="email" name="email" placeholder="your@email.com" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Phone</label>
+          <input type="tel" name="phone" placeholder="(503) 555-0000">
+        </div>
+        <div class="form-field">
+          <label>Publication / Outlet *</label>
+          <input type="text" name="publication" placeholder="e.g. Wildlens Collective LLC" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Event Name *</label>
+          <input type="text" name="event_name" placeholder="e.g. Foo Fighters at Moda Center" required>
+        </div>
+        <div class="form-field">
+          <label>Event Date *</label>
+          <input type="date" name="event_date" required>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Venue & City *</label>
+        <input type="text" name="venue" placeholder="e.g. Moda Center, Portland OR" required>
+      </div>
+      <div class="form-field">
+        <label>Credential Type Needed</label>
+        <select name="credential_type">
+          <option value="">Select type</option>
+          <option>Photo Pit Access</option>
+          <option>Full Event Access</option>
+          <option>Press Box / Media Area</option>
+          <option>Field / Sideline Access</option>
+          <option>Backstage / All-Access</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Intended Use of Photos *</label>
+        <select name="usage" required>
+          <option value="">Select usage</option>
+          <option>Editorial / Online Publication</option>
+          <option>Social Media — Wildlens Collective</option>
+          <option>Print Publication</option>
+          <option>Artist / Team Promotional</option>
+          <option>Multiple</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Website / Portfolio Link</label>
+        <input type="url" name="portfolio" placeholder="https://wildlens-collective.netlify.app">
+      </div>
+      <div class="form-field">
+        <label>Additional Notes</label>
+        <textarea rows="4" name="message" placeholder="Any additional context, previous credentials held, or special requirements..."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Submit Request →</button>
+    </form>
+
+    <!-- PRINTS FORM -->
+    <form id="form-print" class="contact-form" action="https://formspree.io/f/meerzkap" method="POST" style="display:none;">
+      <input type="hidden" name="inquiry_type" value="Prints / Licensing">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Your Name *</label>
+          <input type="text" name="name" placeholder="Full name" required>
+        </div>
+        <div class="form-field">
+          <label>Email *</label>
+          <input type="email" name="email" placeholder="your@email.com" required>
         </div>
       </div>
       <div class="form-field">
         <label>Inquiry Type</label>
-        <select>
-          <option value="">Select a subject</option>
-          <option>Print Purchase</option>
-          <option>Licensing / Commercial</option>
-          <option>Custom Shoot</option>
-          <option>Collaboration</option>
-          <option>General</option>
+        <select name="print_type">
+          <option value="">Select</option>
+          <option>Fine Art Print Purchase</option>
+          <option>Digital Download / License</option>
+          <option>Commercial Licensing</option>
+          <option>Custom Print Size</option>
+          <option>Bulk / Wholesale</option>
         </select>
       </div>
       <div class="form-field">
-        <label>Message</label>
-        <textarea rows="5" placeholder="Tell me what you're looking for..."></textarea>
+        <label>Which photo(s) are you interested in?</label>
+        <input type="text" name="photos" placeholder="e.g. Multnomah Falls, Gorge Summit Trail...">
       </div>
-      <button type="submit" class="form-submit">Send Message</button>
+      <div class="form-field">
+        <label>Message</label>
+        <textarea rows="4" name="message" placeholder="Preferred size, quantity, intended use, any questions..."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send Inquiry →</button>
+    </form>
     </form>
 
     <div style="margin-top:4rem; display:flex; justify-content:center; gap:3rem; flex-wrap:wrap;">
       <a href="https://instagram.com/wildlenscollectivellc" target="_blank" style="color:var(--mist); text-decoration:none; font-size:0.78rem; letter-spacing:0.25em; text-transform:uppercase; transition:color 0.2s;" onmouseover="this.style.color='var(--sage)'" onmouseout="this.style.color='var(--mist)'">
         Instagram ↗
       </a>
-      <a href="mailto:hello@wildlenscollective.com" style="color:var(--mist); text-decoration:none; font-size:0.78rem; letter-spacing:0.25em; text-transform:uppercase; transition:color 0.2s;" onmouseover="this.style.color='var(--sage)'" onmouseout="this.style.color='var(--mist)'">
+      <a href="/cdn-cgi/l/email-protection#553d3039393a15223c393139303b26363a39393036213c23307b363a38" style="color:var(--mist); text-decoration:none; font-size:0.78rem; letter-spacing:0.25em; text-transform:uppercase; transition:color 0.2s;" onmouseover="this.style.color='var(--sage)'" onmouseout="this.style.color='var(--mist)'">
         Email ↗
       </a>
     </div>
@@ -1008,7 +1171,7 @@
   <div class="lightbox-caption" id="lightboxCaption" style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--mist);letter-spacing:0.15em;text-align:center;"></div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // Nav scroll effect
   window.addEventListener('scroll', () => {
     document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 80);
@@ -1037,19 +1200,14 @@
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-  // Form
-  function handleSubmit(e) {
-    e.preventDefault();
-    const btn = e.target.querySelector('.form-submit');
-    btn.textContent = 'Message Sent ✓';
-    btn.style.background = 'var(--sage)';
-    btn.style.color = 'var(--ink)';
-    setTimeout(() => {
-      btn.textContent = 'Send Message';
-      btn.style.background = '';
-      btn.style.color = '';
-      e.target.reset();
-    }, 3000);
+  // Form tab switching
+  function switchForm(type, btn) {
+    document.querySelectorAll('#contact .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('form-hire').style.display = 'none';
+    document.getElementById('form-press').style.display = 'none';
+    document.getElementById('form-print').style.display = 'none';
+    document.getElementById('form-' + type).style.display = 'flex';
   }
 
   // Intersection Observer for reveal animations
@@ -1064,11 +1222,4 @@
 
   document.querySelectorAll('.gallery-item, .shop-item, .location-row').forEach(el => {
     el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(el);
-  });
-</script>
-
-</body>
-</html>
+    el.style.
