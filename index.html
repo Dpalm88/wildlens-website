@@ -1207,7 +1207,10 @@
     document.getElementById('form-hire').style.display = 'none';
     document.getElementById('form-press').style.display = 'none';
     document.getElementById('form-print').style.display = 'none';
-    document.getElementById('form-' + type).style.display = 'flex';
+    const form = document.getElementById('form-' + type);
+    form.style.display = 'flex';
+    form.style.opacity = '1';
+    form.style.transform = 'none';
   }
 
   // Intersection Observer for reveal animations
