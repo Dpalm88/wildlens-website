@@ -1,1395 +1,1843 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wildlens Collective — Oregon Nature Photography</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --ink: #0d0f0e;
-    --moss: #2a3a2e;
-    --sage: #6b8c6e;
-    --mist: #b8c9bb;
-    --snow: #eef2ee;
-    --rust: #c4622d;
-    --gold: #d4a853;
-    --water: #3a5f6f;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--ink);
-    color: var(--snow);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    overflow-x: hidden;
-    cursor: crosshair;
-  }
-
-  /* ─── NAV ─── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1.5rem 3rem;
-    background: linear-gradient(to bottom, rgba(13,15,14,0.95), transparent);
-    transition: background 0.3s;
-  }
-  nav.scrolled { background: rgba(13,15,14,0.97); }
-
-  .nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 0.15em;
-    color: var(--snow);
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--sage); }
-
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a {
-    color: var(--mist);
-    text-decoration: none;
-    font-size: 0.8rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--snow); }
-
-  /* ─── HERO ─── */
-  .hero {
-    position: relative;
-    height: 100vh;
-    display: flex; align-items: flex-end;
-    padding: 0 3rem 5rem;
-    overflow: hidden;
-  }
-
-  .hero-bg {
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse at 30% 60%, rgba(42,58,46,0.4) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(58,95,111,0.3) 0%, transparent 50%),
-      linear-gradient(160deg, #0d1a12 0%, #0d0f0e 40%, #111820 100%);
-  }
-
-  /* Animated noise texture */
-  .hero-bg::after {
-    content: '';
-    position: absolute; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    opacity: 0.4;
-    pointer-events: none;
-  }
-
-  /* Fake horizon line */
-  .hero-horizon {
-    position: absolute;
-    bottom: 30%;
-    left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(107,140,110,0.3), rgba(58,95,111,0.4), transparent);
-  }
-
-  /* Tree silhouettes */
-  .hero-trees {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 35%;
-    background: linear-gradient(to top, var(--ink) 20%, transparent);
-  }
-  .hero-trees svg {
-    position: absolute; bottom: 0; width: 100%; height: 100%;
-  }
-
-  .hero-content {
-    position: relative; z-index: 2;
-    max-width: 800px;
-    animation: heroReveal 1.4s ease forwards;
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  @keyframes heroReveal {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero-eyebrow {
-    font-size: 0.75rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--sage);
-    margin-bottom: 1rem;
-    display: flex; align-items: center; gap: 1rem;
-  }
-  .hero-eyebrow::before {
-    content: '';
-    display: block;
-    width: 40px; height: 1px;
-    background: var(--sage);
-  }
-
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(4rem, 10vw, 9rem);
-    font-weight: 300;
-    line-height: 0.9;
-    letter-spacing: -0.02em;
-    margin-bottom: 1.5rem;
-  }
-  .hero-title em {
-    font-style: italic;
-    color: var(--sage);
-  }
-
-  .hero-sub {
-    font-size: 1rem;
-    color: var(--mist);
-    max-width: 400px;
-    line-height: 1.7;
-    margin-bottom: 2.5rem;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center; gap: 0.75rem;
-    padding: 0.9rem 2rem;
-    background: transparent;
-    border: 1px solid var(--sage);
-    color: var(--snow);
-    text-decoration: none;
-    font-size: 0.78rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    transition: all 0.3s;
-    cursor: pointer;
-  }
-  .btn-primary:hover {
-    background: var(--sage);
-    color: var(--ink);
-    border-color: var(--sage);
-  }
-  .btn-primary .arrow { transition: transform 0.3s; }
-  .btn-primary:hover .arrow { transform: translateX(4px); }
-
-  /* ─── SCROLL INDICATOR ─── */
-  .scroll-hint {
-    position: absolute;
-    right: 3rem; bottom: 3rem;
-    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--sage);
-    z-index: 2;
-    animation: fadeIn 2s 1s ease both;
-  }
-  .scroll-hint::after {
-    content: '';
-    width: 1px;
-    height: 50px;
-    background: linear-gradient(to bottom, var(--sage), transparent);
-    animation: scrollLine 2s 1.5s ease infinite;
-  }
-  @keyframes scrollLine {
-    0% { transform: scaleY(0); transform-origin: top; }
-    50% { transform: scaleY(1); transform-origin: top; }
-    51% { transform-origin: bottom; }
-    100% { transform: scaleY(0); transform-origin: bottom; }
-  }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-  /* ─── SECTION SHARED ─── */
-  section { padding: 7rem 3rem; }
-
-  .section-label {
-    font-size: 0.68rem;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--sage);
-    margin-bottom: 0.75rem;
-    display: flex; align-items: center; gap: 0.75rem;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(107,140,110,0.25);
-    max-width: 60px;
-  }
-
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-    font-weight: 300;
-    line-height: 1.05;
-    margin-bottom: 1.5rem;
-  }
-  .section-title em { font-style: italic; color: var(--sage); }
-
-  /* ─── GALLERY ─── */
-  #gallery { background: #0a0c0b; }
-
-  .gallery-filters {
-    display: flex; gap: 0.5rem; flex-wrap: wrap;
-    margin-bottom: 3rem;
-  }
-  .filter-btn {
-    padding: 0.4rem 1.2rem;
-    background: transparent;
-    border: 1px solid rgba(107,140,110,0.3);
-    color: var(--mist);
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.25s;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .filter-btn:hover, .filter-btn.active {
-    background: var(--sage);
-    border-color: var(--sage);
-    color: var(--ink);
-  }
-
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-auto-rows: 200px;
-    gap: 6px;
-  }
-
-  .gallery-item {
-    position: relative;
-    overflow: hidden;
-    background: var(--moss);
-    cursor: pointer;
-  }
-  .gallery-item:nth-child(1) { grid-column: span 5; grid-row: span 2; }
-  .gallery-item:nth-child(2) { grid-column: span 3; grid-row: span 2; }
-  .gallery-item:nth-child(3) { grid-column: span 4; grid-row: span 2; }
-  .gallery-item:nth-child(4) { grid-column: span 5; grid-row: span 2; }
-  .gallery-item:nth-child(5) { grid-column: span 4; grid-row: span 1; }
-  .gallery-item:nth-child(6) { grid-column: span 3; grid-row: span 1; }
-  .gallery-item:nth-child(7) { grid-column: span 5; grid-row: span 1; }
-
-  .gallery-item img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-    filter: saturate(0.85) brightness(0.9);
-  }
-  .gallery-item:hover img {
-    transform: scale(1.05);
-    filter: saturate(1.1) brightness(1);
-  }
-
-  .gallery-item-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(13,15,14,0.8) 0%, transparent 50%);
-    opacity: 0;
-    transition: opacity 0.4s;
-    display: flex; align-items: flex-end; padding: 1.25rem;
-  }
-  .gallery-item:hover .gallery-item-overlay { opacity: 1; }
-
-  .gallery-item-info h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    font-weight: 400;
-  }
-  .gallery-item-info p {
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--sage);
-    margin-top: 0.25rem;
-  }
-
-  .gallery-item img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-    filter: saturate(0.9) brightness(0.92);
-  }
-  .gallery-item:hover img {
-    transform: scale(1.05);
-    filter: saturate(1.1) brightness(1);
-  }
-
-  /* ─── ABOUT ─── */
-  #about {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8rem;
-    align-items: center;
-    max-width: 1300px;
-    margin: 0 auto;
-    padding-top: 8rem;
-    padding-bottom: 8rem;
-  }
-
-  .about-visual {
-    position: relative;
-  }
-  .about-img-frame {
-    position: relative;
-    aspect-ratio: 3/4;
-    overflow: hidden;
-    background: var(--moss);
-  }
-  .about-img-frame::before {
-    content: '';
-    position: absolute;
-    top: -20px; left: -20px; right: 20px; bottom: 20px;
-    border: 1px solid rgba(107,140,110,0.25);
-    z-index: -1;
-  }
-  .about-ph {
-    width: 100%; height: 100%;
-    background: linear-gradient(160deg, #1a2a20 0%, #2a4a38 40%, #1a3040 100%);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .about-ph-icon {
-    font-size: 5rem;
-    opacity: 0.15;
-  }
-
-  .about-stat-bar {
-    position: absolute;
-    bottom: -2rem; right: -2rem;
-    background: var(--moss);
-    border: 1px solid rgba(107,140,110,0.2);
-    padding: 1.5rem;
-    min-width: 160px;
-  }
-  .about-stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 0.05em;
-    color: var(--gold);
-    line-height: 1;
-  }
-  .about-stat-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--mist);
-    margin-top: 0.25rem;
-  }
-
-  .about-text p {
-    color: var(--mist);
-    line-height: 1.85;
-    margin-bottom: 1.25rem;
-    font-size: 0.95rem;
-  }
-  .about-text p strong {
-    color: var(--snow);
-    font-weight: 400;
-  }
-
-  .about-tags {
-    display: flex; flex-wrap: wrap; gap: 0.5rem;
-    margin-top: 2rem;
-  }
-  .about-tag {
-    padding: 0.3rem 0.9rem;
-    border: 1px solid rgba(107,140,110,0.3);
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--sage);
-  }
-
-  /* ─── SHOP ─── */
-  #shop { background: #0a0c0b; }
-  #shop > * { max-width: 1300px; margin-left: auto; margin-right: auto; }
-
-  .shop-header { margin-bottom: 3rem; }
-
-  .shop-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-  }
-
-  .shop-item {
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-    background: var(--moss);
-  }
-
-  .shop-item-img {
-    aspect-ratio: 4/5;
-    position: relative;
-    overflow: hidden;
-  }
-  .shop-ph {
-    width: 100%; height: 100%;
-    transition: transform 0.5s ease;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .shop-item:hover .shop-ph { transform: scale(1.04); }
-
-  .shop-item-info {
-    padding: 1.5rem;
-    background: #0f1410;
-    border-top: 1px solid rgba(107,140,110,0.1);
-  }
-  .shop-item-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
-    font-weight: 300;
-    margin-bottom: 0.25rem;
-  }
-  .shop-item-meta {
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--sage);
-    margin-bottom: 1rem;
-  }
-  .shop-item-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .shop-item-price {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    letter-spacing: 0.05em;
-    color: var(--gold);
-  }
-  .shop-buy-btn {
-    padding: 0.4rem 1rem;
-    background: transparent;
-    border: 1px solid rgba(107,140,110,0.4);
-    color: var(--mist);
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .shop-buy-btn:hover { background: var(--sage); border-color: var(--sage); color: var(--ink); }
-
-  /* ─── FEATURED LOCATIONS ─── */
-  #locations {
-    max-width: 1300px;
-    margin: 0 auto;
-  }
-  .location-list {
-    margin-top: 3rem;
-  }
-  .location-row {
-    display: flex;
-    align-items: center;
-    padding: 2rem 0;
-    border-top: 1px solid rgba(107,140,110,0.1);
-    cursor: pointer;
-    transition: padding-left 0.3s;
-    gap: 2rem;
-  }
-  .location-row:hover { padding-left: 1rem; border-color: rgba(107,140,110,0.4); }
-  .location-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    color: rgba(107,140,110,0.4);
-    min-width: 3rem;
-    letter-spacing: 0.1em;
-  }
-  .location-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.5rem, 3vw, 2.5rem);
-    font-weight: 300;
-    flex: 1;
-    transition: color 0.2s;
-  }
-  .location-row:hover .location-name { color: var(--sage); }
-  .location-type {
-    font-size: 0.7rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--sage);
-    min-width: 120px;
-    text-align: right;
-  }
-  .location-arrow {
-    color: var(--sage);
-    opacity: 0;
-    transition: opacity 0.2s, transform 0.2s;
-    font-size: 1.2rem;
-  }
-  .location-row:hover .location-arrow { opacity: 1; transform: translateX(6px); }
-
-  .location-thumb {
-    width: 80px;
-    height: 54px;
-    overflow: hidden;
-    border-radius: 2px;
-    flex-shrink: 0;
-    opacity: 0;
-    transform: scale(0.92);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-  .location-thumb img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    filter: saturate(0.8) brightness(0.85);
-    transition: filter 0.3s;
-  }
-  .location-row:hover .location-thumb {
-    opacity: 1;
-    transform: scale(1);
-  }
-  .location-row:hover .location-thumb img {
-    filter: saturate(1.1) brightness(1);
-  }
-
-  /* ─── CONTACT ─── */
-  #contact {
-    background: #0a0c0b;
-    text-align: center;
-  }
-  .contact-inner {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  .contact-inner .section-label {
-    justify-content: center;
-  }
-  .contact-inner .section-label::after { display: none; }
-  .contact-inner .section-label::before {
-    content: '';
-    flex: none;
-    width: 40px; height: 1px;
-    background: rgba(107,140,110,0.5);
-  }
-  .contact-lead {
-    color: var(--mist);
-    font-size: 1rem;
-    line-height: 1.8;
-    margin-bottom: 3rem;
-  }
-
-  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
-
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-  .form-field {
-    display: flex; flex-direction: column; gap: 0.4rem;
-    text-align: left;
-  }
-  .form-field label {
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--sage);
-  }
-  .form-field input,
-  .form-field textarea,
-  .form-field select {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(107,140,110,0.2);
-    color: var(--snow);
-    padding: 0.85rem 1rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 300;
-    transition: border-color 0.2s;
-    outline: none;
-    resize: none;
-    -webkit-appearance: none;
-  }
-  .form-field input:focus,
-  .form-field textarea:focus,
-  .form-field select:focus { border-color: var(--sage); }
-
-  .form-field select option { background: #1a2a1a; }
-
-  .form-submit {
-    margin-top: 1rem;
-    padding: 1rem 3rem;
-    background: transparent;
-    border: 1px solid var(--sage);
-    color: var(--snow);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.78rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s;
-    align-self: center;
-  }
-  .form-submit:hover { background: var(--sage); color: var(--ink); }
-
-  /* ─── FOOTER ─── */
-  footer {
-    padding: 3rem;
-    border-top: 1px solid rgba(107,140,110,0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  .footer-brand {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    letter-spacing: 0.15em;
-  }
-  .footer-brand span { color: var(--sage); }
-  .footer-copy {
-    font-size: 0.72rem;
-    color: rgba(184,201,187,0.4);
-    letter-spacing: 0.1em;
-  }
-  .footer-socials { display: flex; gap: 1.5rem; }
-  .footer-socials a {
-    color: var(--mist);
-    text-decoration: none;
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .footer-socials a:hover { color: var(--sage); }
-
-  /* ─── LIGHTBOX ─── */
-  .lightbox {
-    position: fixed; inset: 0; z-index: 1000;
-    background: rgba(13,15,14,0.97);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.3s;
-  }
-  .lightbox.open { opacity: 1; pointer-events: all; }
-  .lightbox-close {
-    position: absolute; top: 2rem; right: 2.5rem;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 0.2em;
-    color: var(--mist);
-    cursor: pointer;
-    transition: color 0.2s;
-  }
-  .lightbox-close:hover { color: var(--snow); }
-  .lightbox-img {
-    max-width: 85vw;
-    max-height: 85vh;
-    object-fit: contain;
-    display: block;
-  }
-  .lightbox-ph {
-    width: 60vw;
-    height: 70vh;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;
-    color: var(--mist);
-    flex-direction: column;
-    gap: 1rem;
-  }
-  .lightbox-ph p { font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sage); }
-
-  /* ─── RESPONSIVE ─── */
-  /* ─── HAMBURGER ─── */
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    padding: 4px;
-    background: none;
-    border: none;
-    z-index: 200;
-  }
-  .hamburger span {
-    display: block;
-    width: 24px;
-    height: 1.5px;
-    background: var(--snow);
-    transition: all 0.3s ease;
-    transform-origin: center;
-  }
-  .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-  .hamburger.open span:nth-child(2) { opacity: 0; }
-  .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-
-  .mobile-menu {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(13,15,14,0.98);
-    z-index: 150;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2.5rem;
-  }
-  .mobile-menu.open { display: flex; }
-  .mobile-menu a {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.5rem;
-    font-weight: 300;
-    color: var(--snow);
-    text-decoration: none;
-    letter-spacing: 0.05em;
-    transition: color 0.2s;
-  }
-  .mobile-menu a:hover { color: var(--sage); }
-
-  @media (max-width: 900px) {
-    nav { padding: 1.25rem 1.5rem; }
-    .nav-links { display: none; }
-    .hamburger { display: flex; }
-    section { padding: 4rem 1.25rem; }
-    .hero { padding: 0 1.25rem 3.5rem; }
-    .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
-    .section-title { font-size: clamp(2rem, 8vw, 3.5rem); }
-    .gallery-filters { gap: 0.35rem; }
-    .filter-btn { padding: 0.35rem 0.8rem; font-size: 0.68rem; }
-    .gallery-grid {
-      grid-template-columns: repeat(2, 1fr);
-      grid-auto-rows: 180px;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wildlens Collective — Oregon Nature Photography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0d0f0e;
+      --moss: #2a3a2e;
+      --sage: #6b8c6e;
+      --mist: #b8c9bb;
+      --snow: #eef2ee;
+      --rust: #c4622d;
+      --gold: #d4a853;
+      --water: #3a5f6f;
     }
-    .gallery-item { grid-column: span 1 !important; grid-row: span 1 !important; }
-    #about { grid-template-columns: 1fr; gap: 3rem; }
-    .about-visual { order: -1; }
-    .about-stat-bar { bottom: -1rem; right: 1rem; }
-    .shop-grid { grid-template-columns: 1fr; }
-    .location-photos { grid-template-columns: repeat(2, 1fr) !important; }
-    .location-name { font-size: clamp(1.1rem, 5vw, 1.8rem); }
-    footer { flex-direction: column; text-align: center; }
-    .form-row { grid-template-columns: 1fr; }
-    .scroll-hint { display: none; }
-    .contact-inner { max-width: 100% !important; }
-  }
 
-  @media (max-width: 480px) {
-    .gallery-grid {
-      grid-template-columns: 1fr;
-      grid-auto-rows: 260px;
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    .hero-title { font-size: clamp(2.8rem, 16vw, 4rem); }
-    .shop-item-img { aspect-ratio: 16/9; }
-  }
-</style>
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--ink);
+      color: var(--snow);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 3rem;
+      background: linear-gradient(to bottom, rgba(13, 15, 14, 0.95), transparent);
+      transition: background 0.3s;
+    }
+
+    nav.scrolled {
+      background: rgba(13, 15, 14, 0.97);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.15em;
+      color: var(--snow);
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--sage);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--mist);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--snow);
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 3rem 5rem;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 60%, rgba(42, 58, 46, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(58, 95, 111, 0.3) 0%, transparent 50%),
+        linear-gradient(160deg, #0d1a12 0%, #0d0f0e 40%, #111820 100%);
+    }
+
+    /* Animated noise texture */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    /* Fake horizon line */
+    .hero-horizon {
+      position: absolute;
+      bottom: 30%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(107, 140, 110, 0.3), rgba(58, 95, 111, 0.4), transparent);
+    }
+
+    /* Tree silhouettes */
+    .hero-trees {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 35%;
+      background: linear-gradient(to top, var(--ink) 20%, transparent);
+    }
+
+    .hero-trees svg {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      animation: heroReveal 1.4s ease forwards;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    @keyframes heroReveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--sage);
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      font-weight: 300;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--sage);
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--mist);
+      max-width: 400px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 2rem;
+      background: transparent;
+      border: 1px solid var(--sage);
+      color: var(--snow);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: var(--sage);
+      color: var(--ink);
+      border-color: var(--sage);
+    }
+
+    .btn-primary .arrow {
+      transition: transform 0.3s;
+    }
+
+    .btn-primary:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    /* ─── SCROLL INDICATOR ─── */
+    .scroll-hint {
+      position: absolute;
+      right: 3rem;
+      bottom: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--sage);
+      z-index: 2;
+      animation: fadeIn 2s 1s ease both;
+    }
+
+    .scroll-hint::after {
+      content: '';
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--sage), transparent);
+      animation: scrollLine 2s 1.5s ease infinite;
+    }
+
+    @keyframes scrollLine {
+      0% {
+        transform: scaleY(0);
+        transform-origin: top;
+      }
+
+      50% {
+        transform: scaleY(1);
+        transform-origin: top;
+      }
+
+      51% {
+        transform-origin: bottom;
+      }
+
+      100% {
+        transform: scaleY(0);
+        transform-origin: bottom;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* ─── SECTION SHARED ─── */
+    section {
+      padding: 7rem 3rem;
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(107, 140, 110, 0.25);
+      max-width: 60px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--sage);
+    }
+
+    /* ─── GALLERY ─── */
+    #gallery {
+      background: #0a0c0b;
+    }
+
+    .gallery-filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .filter-btn {
+      padding: 0.4rem 1.2rem;
+      background: transparent;
+      border: 1px solid rgba(107, 140, 110, 0.3);
+      color: var(--mist);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--sage);
+      border-color: var(--sage);
+      color: var(--ink);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 200px;
+      gap: 6px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      background: var(--moss);
+      cursor: pointer;
+    }
+
+    .gallery-item:nth-child(1) {
+      grid-column: span 5;
+      grid-row: span 2;
+    }
+
+    .gallery-item:nth-child(2) {
+      grid-column: span 3;
+      grid-row: span 2;
+    }
+
+    .gallery-item:nth-child(3) {
+      grid-column: span 4;
+      grid-row: span 2;
+    }
+
+    .gallery-item:nth-child(4) {
+      grid-column: span 5;
+      grid-row: span 2;
+    }
+
+    .gallery-item:nth-child(5) {
+      grid-column: span 4;
+      grid-row: span 1;
+    }
+
+    .gallery-item:nth-child(6) {
+      grid-column: span 3;
+      grid-row: span 1;
+    }
+
+    .gallery-item:nth-child(7) {
+      grid-column: span 5;
+      grid-row: span 1;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+      filter: saturate(0.85) brightness(0.9);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+      filter: saturate(1.1) brightness(1);
+    }
+
+    .gallery-item-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(13, 15, 14, 0.8) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1.25rem;
+    }
+
+    .gallery-item:hover .gallery-item-overlay {
+      opacity: 1;
+    }
+
+    .gallery-item-info h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    .gallery-item-info p {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-top: 0.25rem;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+      filter: saturate(0.9) brightness(0.92);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+      filter: saturate(1.1) brightness(1);
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8rem;
+      align-items: center;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding-top: 8rem;
+      padding-bottom: 8rem;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-img-frame {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      background: var(--moss);
+    }
+
+    .about-img-frame::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: 20px;
+      bottom: 20px;
+      border: 1px solid rgba(107, 140, 110, 0.25);
+      z-index: -1;
+    }
+
+    .about-ph {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(160deg, #1a2a20 0%, #2a4a38 40%, #1a3040 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-ph-icon {
+      font-size: 5rem;
+      opacity: 0.15;
+    }
+
+    .about-stat-bar {
+      position: absolute;
+      bottom: -2rem;
+      right: -2rem;
+      background: var(--moss);
+      border: 1px solid rgba(107, 140, 110, 0.2);
+      padding: 1.5rem;
+      min-width: 160px;
+    }
+
+    .about-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.05em;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .about-stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--mist);
+      margin-top: 0.25rem;
+    }
+
+    .about-text p {
+      color: var(--mist);
+      line-height: 1.85;
+      margin-bottom: 1.25rem;
+      font-size: 0.95rem;
+    }
+
+    .about-text p strong {
+      color: var(--snow);
+      font-weight: 400;
+    }
+
+    .about-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .about-tag {
+      padding: 0.3rem 0.9rem;
+      border: 1px solid rgba(107, 140, 110, 0.3);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+    }
+
+    /* ─── SHOP ─── */
+    #shop {
+      background: #0a0c0b;
+    }
+
+    #shop>* {
+      max-width: 1300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .shop-header {
+      margin-bottom: 3rem;
+    }
+
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .shop-item {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      background: var(--moss);
+    }
+
+    .shop-item-img {
+      aspect-ratio: 4/5;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shop-ph {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shop-item:hover .shop-ph {
+      transform: scale(1.04);
+    }
+
+    .shop-item-info {
+      padding: 1.5rem;
+      background: #0f1410;
+      border-top: 1px solid rgba(107, 140, 110, 0.1);
+    }
+
+    .shop-item-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 300;
+      margin-bottom: 0.25rem;
+    }
+
+    .shop-item-meta {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 1rem;
+    }
+
+    .shop-item-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .shop-item-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.05em;
+      color: var(--gold);
+    }
+
+    .shop-buy-btn {
+      padding: 0.4rem 1rem;
+      background: transparent;
+      border: 1px solid rgba(107, 140, 110, 0.4);
+      color: var(--mist);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .shop-buy-btn:hover {
+      background: var(--sage);
+      border-color: var(--sage);
+      color: var(--ink);
+    }
+
+    /* ─── FEATURED LOCATIONS ─── */
+    #locations {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .location-list {
+      margin-top: 3rem;
+    }
+
+    .location-row {
+      display: flex;
+      align-items: center;
+      padding: 2rem 0;
+      border-top: 1px solid rgba(107, 140, 110, 0.1);
+      cursor: pointer;
+      transition: padding-left 0.3s;
+      gap: 2rem;
+    }
+
+    .location-row:hover {
+      padding-left: 1rem;
+      border-color: rgba(107, 140, 110, 0.4);
+    }
+
+    .location-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      color: rgba(107, 140, 110, 0.4);
+      min-width: 3rem;
+      letter-spacing: 0.1em;
+    }
+
+    .location-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: 300;
+      flex: 1;
+      transition: color 0.2s;
+    }
+
+    .location-row:hover .location-name {
+      color: var(--sage);
+    }
+
+    .location-type {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--sage);
+      min-width: 120px;
+      text-align: right;
+    }
+
+    .location-arrow {
+      color: var(--sage);
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      font-size: 1.2rem;
+    }
+
+    .location-row:hover .location-arrow {
+      opacity: 1;
+      transform: translateX(6px);
+    }
+
+    .location-thumb {
+      width: 80px;
+      height: 54px;
+      overflow: hidden;
+      border-radius: 2px;
+      flex-shrink: 0;
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .location-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.8) brightness(0.85);
+      transition: filter 0.3s;
+    }
+
+    .location-row:hover .location-thumb {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .location-row:hover .location-thumb img {
+      filter: saturate(1.1) brightness(1);
+    }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      background: #0a0c0b;
+      text-align: center;
+    }
+
+    .contact-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-inner .section-label {
+      justify-content: center;
+    }
+
+    .contact-inner .section-label::after {
+      display: none;
+    }
+
+    .contact-inner .section-label::before {
+      content: '';
+      flex: none;
+      width: 40px;
+      height: 1px;
+      background: rgba(107, 140, 110, 0.5);
+    }
+
+    .contact-lead {
+      color: var(--mist);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 3rem;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      text-align: left;
+    }
+
+    .form-field label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--sage);
+    }
+
+    .form-field input,
+    .form-field textarea,
+    .form-field select {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(107, 140, 110, 0.2);
+      color: var(--snow);
+      padding: 0.85rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      transition: border-color 0.2s;
+      outline: none;
+      resize: none;
+      -webkit-appearance: none;
+    }
+
+    .form-field input:focus,
+    .form-field textarea:focus,
+    .form-field select:focus {
+      border-color: var(--sage);
+    }
+
+    .form-field select option {
+      background: #1a2a1a;
+    }
+
+    .form-submit {
+      margin-top: 1rem;
+      padding: 1rem 3rem;
+      background: transparent;
+      border: 1px solid var(--sage);
+      color: var(--snow);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+      align-self: center;
+    }
+
+    .form-submit:hover {
+      background: var(--sage);
+      color: var(--ink);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 3rem;
+      border-top: 1px solid rgba(107, 140, 110, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.15em;
+    }
+
+    .footer-brand span {
+      color: var(--sage);
+    }
+
+    .footer-copy {
+      font-size: 0.72rem;
+      color: rgba(184, 201, 187, 0.4);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-socials a {
+      color: var(--mist);
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .footer-socials a:hover {
+      color: var(--sage);
+    }
+
+    /* ─── LIGHTBOX ─── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(13, 15, 14, 0.97);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 2rem;
+      right: 2.5rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.2em;
+      color: var(--mist);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .lightbox-close:hover {
+      color: var(--snow);
+    }
+
+    .lightbox-img {
+      max-width: 85vw;
+      max-height: 85vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    .lightbox-ph {
+      width: 60vw;
+      height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--mist);
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .lightbox-ph p {
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    /* ─── HAMBURGER ─── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+      z-index: 200;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--snow);
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.open span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 15, 14, 0.98);
+      z-index: 150;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+    }
+
+    .mobile-menu a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--snow);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover {
+      color: var(--sage);
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        padding: 1.25rem 1.5rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      section {
+        padding: 4rem 1.25rem;
+      }
+
+      .hero {
+        padding: 0 1.25rem 3.5rem;
+      }
+
+      .hero-title {
+        font-size: clamp(3rem, 14vw, 5rem);
+      }
+
+      .section-title {
+        font-size: clamp(2rem, 8vw, 3.5rem);
+      }
+
+      .gallery-filters {
+        gap: 0.35rem;
+      }
+
+      .filter-btn {
+        padding: 0.35rem 0.8rem;
+        font-size: 0.68rem;
+      }
+
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 180px;
+      }
+
+      .gallery-item {
+        grid-column: span 1 !important;
+        grid-row: span 1 !important;
+      }
+
+      #about {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .about-visual {
+        order: -1;
+      }
+
+      .about-stat-bar {
+        bottom: -1rem;
+        right: 1rem;
+      }
+
+      .shop-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .location-photos {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+
+      .location-name {
+        font-size: clamp(1.1rem, 5vw, 1.8rem);
+      }
+
+      footer {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .scroll-hint {
+        display: none;
+      }
+
+      .contact-inner {
+        max-width: 100% !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: 260px;
+      }
+
+      .hero-title {
+        font-size: clamp(2.8rem, 16vw, 4rem);
+      }
+
+      .shop-item-img {
+        aspect-ratio: 16/9;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- NAV -->
-<nav id="nav">
-  <a href="#" class="nav-logo">Wildlens<span>.</span></a>
-  <ul class="nav-links">
-    <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#shop">Prints</a></li>
-    <li><a href="#locations">Locations</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <button class="hamburger" id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">Wildlens<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#shop">Prints</a></li>
+      <li><a href="#locations">Locations</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#gallery" onclick="closeMobileMenu()">Gallery</a>
-  <a href="#about" onclick="closeMobileMenu()">About</a>
-  <a href="#shop" onclick="closeMobileMenu()">Prints</a>
-  <a href="#locations" onclick="closeMobileMenu()">Locations</a>
-  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
-</div>
-
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-horizon"></div>
-  <div class="hero-trees">
-    <svg viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
-      <!-- Silhouette tree line -->
-      <path d="M0,300 L0,200 L20,200 L30,150 L40,200 L55,200 L65,120 L80,200 L95,200 L105,160 L115,200 L140,200 L150,130 L165,200 L200,200 L215,170 L230,200 L260,200 L280,110 L300,200 L340,200 L355,155 L370,200 L420,200 L440,80 L465,200 L510,200 L530,140 L550,200 L600,200 L620,100 L645,200 L700,200 L720,165 L740,200 L800,200 L825,120 L855,200 L910,200 L940,145 L960,200 L1020,200 L1040,90 L1070,200 L1130,200 L1150,170 L1170,200 L1220,200 L1240,130 L1260,200 L1310,200 L1330,155 L1350,200 L1440,200 L1440,300 Z" fill="#0d0f0e"/>
-      <!-- Reflection of mountains on water in distance -->
-      <ellipse cx="720" cy="205" rx="500" ry="8" fill="rgba(42,58,46,0.15)"/>
-    </svg>
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#gallery" onclick="closeMobileMenu()">Gallery</a>
+    <a href="#about" onclick="closeMobileMenu()">About</a>
+    <a href="#shop" onclick="closeMobileMenu()">Prints</a>
+    <a href="#locations" onclick="closeMobileMenu()">Locations</a>
+    <a href="#contact" onclick="closeMobileMenu()">Contact</a>
   </div>
 
-  <div class="hero-content">
-    <div class="hero-eyebrow">Oregon · Pacific Northwest · Nature</div>
-    <h1 class="hero-title">Wild<em>lens</em><br>Collective</h1>
-    <p class="hero-sub">Landscape and nature photography from the wild heart of the Pacific Northwest — captured by someone who never stops exploring.</p>
-    <a href="#gallery" class="btn-primary">
-      View the Gallery <span class="arrow">→</span>
-    </a>
-  </div>
-
-  <div class="scroll-hint">Scroll</div>
-</section>
-
-<!-- GALLERY -->
-<section id="gallery">
-  <div style="max-width:1300px; margin:0 auto;">
-    <div class="section-label">Portfolio</div>
-    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
-      <h2 class="section-title">The <em>Collection</em></h2>
-    </div>
-    <div class="gallery-filters">
-      <button class="filter-btn active" onclick="filterGallery('all', this)">All</button>
-      <button class="filter-btn" onclick="filterGallery('mountains', this)">Mountains</button>
-      <button class="filter-btn" onclick="filterGallery('water', this)">Lakes & Rivers</button>
-      <button class="filter-btn" onclick="filterGallery('forests', this)">Forests</button>
-      <button class="filter-btn" onclick="filterGallery('coastal', this)">Coastal</button>
-      <button class="filter-btn" onclick="filterGallery('wildlife', this)">Wildlife</button>
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-horizon"></div>
+    <div class="hero-trees">
+      <svg viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+        <!-- Silhouette tree line -->
+        <path
+          d="M0,300 L0,200 L20,200 L30,150 L40,200 L55,200 L65,120 L80,200 L95,200 L105,160 L115,200 L140,200 L150,130 L165,200 L200,200 L215,170 L230,200 L260,200 L280,110 L300,200 L340,200 L355,155 L370,200 L420,200 L440,80 L465,200 L510,200 L530,140 L550,200 L600,200 L620,100 L645,200 L700,200 L720,165 L740,200 L800,200 L825,120 L855,200 L910,200 L940,145 L960,200 L1020,200 L1040,90 L1070,200 L1130,200 L1150,170 L1170,200 L1220,200 L1240,130 L1260,200 L1310,200 L1330,155 L1350,200 L1440,200 L1440,300 Z"
+          fill="#0d0f0e" />
+        <!-- Reflection of mountains on water in distance -->
+        <ellipse cx="720" cy="205" rx="500" ry="8" fill="rgba(42,58,46,0.15)" />
+      </svg>
     </div>
 
-    <div class="gallery-grid" id="galleryGrid">
-      <div class="gallery-item" onclick="openLightbox('Dog Mountain Storm', 'photos/Dog_mountain_spooky.jpg')">
-        <img src="photos/Dog_mountain_spooky.jpg" alt="Trail descending Dog Mountain with storm clouds over Columbia River">
-        <div class="gallery-item-overlay">
-          <div class="gallery-item-info">
-            <h3>Dog Mountain Storm</h3>
-            <p>Columbia River Gorge · Landscape</p>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Oregon · Pacific Northwest · Nature</div>
+      <h1 class="hero-title">Wild<em>lens</em><br>Collective</h1>
+      <p class="hero-sub">Landscape and nature photography from the wild heart of the Pacific Northwest — captured by
+        someone who never stops exploring.</p>
+      <a href="#gallery" class="btn-primary">
+        View the Gallery <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <div class="scroll-hint">Scroll</div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery">
+    <div style="max-width:1300px; margin:0 auto;">
+      <div class="section-label">Portfolio</div>
+      <div
+        style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+        <h2 class="section-title">The <em>Collection</em></h2>
+      </div>
+      <div class="gallery-filters">
+        <button class="filter-btn active" onclick="filterGallery('all', this)">All</button>
+        <button class="filter-btn" onclick="filterGallery('mountains', this)">Mountains</button>
+        <button class="filter-btn" onclick="filterGallery('water', this)">Lakes & Rivers</button>
+        <button class="filter-btn" onclick="filterGallery('forests', this)">Forests</button>
+        <button class="filter-btn" onclick="filterGallery('coastal', this)">Coastal</button>
+        <button class="filter-btn" onclick="filterGallery('wildlife', this)">Wildlife</button>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="gallery-item" onclick="openLightbox('Dog Mountain Storm', 'photos/Dog_mountain_spooky.jpg')">
+          <img src="photos/Dog_mountain_spooky.jpg"
+            alt="Trail descending Dog Mountain with storm clouds over Columbia River">
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-info">
+              <h3>Dog Mountain Storm</h3>
+              <p>Columbia River Gorge · Landscape</p>
+            </div>
+          </div>
+        </div>
+        <div class="gallery-item" onclick="openLightbox('Through the Gate', 'photos/Gorge_arch.jpg')">
+          <img src="photos/Gorge_arch.jpg" alt="Multnomah Falls framed through mossy iron gate">
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-info">
+              <h3>Through the Gate</h3>
+              <p>Columbia Gorge · Waterfall</p>
+            </div>
+          </div>
+        </div>
+        <div class="gallery-item" onclick="openLightbox('Fern Trail', 'photos/Gorge_river1.jpg')">
+          <img src="photos/Gorge_river1.jpg" alt="Narrow fern-lined trail through mossy Douglas fir forest">
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-info">
+              <h3>Fern Trail</h3>
+              <p>Columbia Gorge · Forest</p>
+            </div>
+          </div>
+        </div>
+        <div class="gallery-item" onclick="openLightbox('Multnomah Falls', 'photos/multnomah_falls1.jpg')">
+          <img src="photos/multnomah_falls1.jpg" alt="Multnomah Falls cascading down basalt cliff">
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-info">
+              <h3>Multnomah Falls</h3>
+              <p>Columbia Gorge · Waterfall</p>
+            </div>
+          </div>
+        </div>
+        <div class="gallery-item" onclick="openLightbox('Wildflowers in Mist', 'photos/wildflowers_spooky.jpg')">
+          <img src="photos/wildflowers_spooky.jpg" alt="Yellow wildflowers on foggy hillside disappearing into mist">
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-info">
+              <h3>Wildflowers in Mist</h3>
+              <p>Columbia Gorge · Flora</p>
+            </div>
+          </div>
+        </div>
+        <div class="gallery-item" onclick="openLightbox('Basalt & Mist', 'photos/rocky_spooky.jpg')">
+          <img src="photos/rocky_spooky.jpg" alt="Moody misty basalt rock formation in the Gorge">
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-info">
+              <h3>Basalt & Mist</h3>
+              <p>Columbia Gorge · Landscape</p>
+            </div>
+          </div>
+        </div>
+        <div class="gallery-item" onclick="openLightbox('Balsamroot & Hood', 'photos/wild_flowerrs_+_mt_hood.jpg')">
+          <img src="photos/wild_flowerrs_+_mt_hood.jpg" alt="Balsamroot wildflower meadow with Mt Hood in background">
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-info">
+              <h3>Balsamroot & Hood</h3>
+              <p>Columbia Gorge · Flora · Vista</p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="gallery-item" onclick="openLightbox('Through the Gate', 'photos/Gorge_arch.jpg')">
-        <img src="photos/Gorge_arch.jpg" alt="Multnomah Falls framed through mossy iron gate">
-        <div class="gallery-item-overlay">
-          <div class="gallery-item-info"><h3>Through the Gate</h3><p>Columbia Gorge · Waterfall</p></div>
+
+      <div style="text-align:center; margin-top:3rem;">
+        <a href="#contact" class="btn-primary">Commission a Print <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section style="padding:8rem 3rem;">
+    <div id="about">
+      <div class="about-visual">
+        <div class="about-img-frame">
+          <div class="about-ph">
+            <div class="about-ph-icon">🏔</div>
+          </div>
+        </div>
+        <div class="about-stat-bar">
+          <div class="about-stat-num">∞</div>
+          <div class="about-stat-label">Miles Explored</div>
         </div>
       </div>
-      <div class="gallery-item" onclick="openLightbox('Fern Trail', 'photos/Gorge_river1.jpg')">
-        <img src="photos/Gorge_river1.jpg" alt="Narrow fern-lined trail through mossy Douglas fir forest">
-        <div class="gallery-item-overlay">
-          <div class="gallery-item-info"><h3>Fern Trail</h3><p>Columbia Gorge · Forest</p></div>
-        </div>
-      </div>
-      <div class="gallery-item" onclick="openLightbox('Multnomah Falls', 'photos/multnomah_falls1.jpg')">
-        <img src="photos/multnomah_falls1.jpg" alt="Multnomah Falls cascading down basalt cliff">
-        <div class="gallery-item-overlay">
-          <div class="gallery-item-info"><h3>Multnomah Falls</h3><p>Columbia Gorge · Waterfall</p></div>
-        </div>
-      </div>
-      <div class="gallery-item" onclick="openLightbox('Wildflowers in Mist', 'photos/wildflowers_spooky.jpg')">
-        <img src="photos/wildflowers_spooky.jpg" alt="Yellow wildflowers on foggy hillside disappearing into mist">
-        <div class="gallery-item-overlay">
-          <div class="gallery-item-info"><h3>Wildflowers in Mist</h3><p>Columbia Gorge · Flora</p></div>
-        </div>
-      </div>
-      <div class="gallery-item" onclick="openLightbox('Basalt & Mist', 'photos/rocky_spooky.jpg')">
-        <img src="photos/rocky_spooky.jpg" alt="Moody misty basalt rock formation in the Gorge">
-        <div class="gallery-item-overlay">
-          <div class="gallery-item-info"><h3>Basalt & Mist</h3><p>Columbia Gorge · Landscape</p></div>
-        </div>
-      </div>
-      <div class="gallery-item" onclick="openLightbox('Balsamroot & Hood', 'photos/wild_flowerrs_+_mt_hood.jpg')">
-        <img src="photos/wild_flowerrs_+_mt_hood.jpg" alt="Balsamroot wildflower meadow with Mt Hood in background">
-        <div class="gallery-item-overlay">
-          <div class="gallery-item-info"><h3>Balsamroot & Hood</h3><p>Columbia Gorge · Flora · Vista</p></div>
+
+      <div class="about-text">
+        <div class="section-label">About</div>
+        <h2 class="section-title">The Story<br>Behind the <em>Lens</em></h2>
+        <p>Wildlens Collective is an Oregon-based nature photography project rooted in a deep love for the Pacific
+          Northwest's extraordinary landscapes — from the misty coastline and ancient forests to volcanic peaks and high
+          desert plains.</p>
+        <p><strong>Every photo is a quiet conversation with the wild</strong> — the blue hour before sunrise over a
+          snow-capped peak, the stillness of a mountain lake in perfect reflection, the amber light of a coastal
+          evening.</p>
+        <p>Based in Oregon, the work spans all four seasons and reaches into the corners of the state most people never
+          see. This is photography that prioritizes presence over production.</p>
+        <div class="about-tags">
+          <span class="about-tag">Landscape</span>
+          <span class="about-tag">Wildlife</span>
+          <span class="about-tag">Astrophotography</span>
+          <span class="about-tag">Pacific Northwest</span>
+          <span class="about-tag">Oregon</span>
+          <span class="about-tag">Fine Art Prints</span>
         </div>
       </div>
     </div>
+  </section>
 
-    <div style="text-align:center; margin-top:3rem;">
-      <a href="#contact" class="btn-primary">Commission a Print <span class="arrow">→</span></a>
+  <!-- SHOP -->
+  <section id="shop">
+    <div class="shop-header">
+      <div class="section-label">Shop</div>
+      <h2 class="section-title">Fine Art <em>Prints</em></h2>
+      <p style="color:var(--mist); max-width:450px; line-height:1.7; font-size:0.9rem; margin-top:0.5rem;">
+        Museum-quality giclée prints on archival paper. Each print is signed and numbered — limited editions only.</p>
     </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section style="padding:8rem 3rem;">
-  <div id="about">
-    <div class="about-visual">
-      <div class="about-img-frame">
-        <div class="about-ph">
-          <div class="about-ph-icon">🏔</div>
-        </div>
-      </div>
-      <div class="about-stat-bar">
-        <div class="about-stat-num">∞</div>
-        <div class="about-stat-label">Miles Explored</div>
-      </div>
-    </div>
-
-    <div class="about-text">
-      <div class="section-label">About</div>
-      <h2 class="section-title">The Story<br>Behind the <em>Lens</em></h2>
-      <p>Wildlens Collective is an Oregon-based nature photography project rooted in a deep love for the Pacific Northwest's extraordinary landscapes — from the misty coastline and ancient forests to volcanic peaks and high desert plains.</p>
-      <p><strong>Every photo is a quiet conversation with the wild</strong> — the blue hour before sunrise over a snow-capped peak, the stillness of a mountain lake in perfect reflection, the amber light of a coastal evening.</p>
-      <p>Based in Oregon, the work spans all four seasons and reaches into the corners of the state most people never see. This is photography that prioritizes presence over production.</p>
-      <div class="about-tags">
-        <span class="about-tag">Landscape</span>
-        <span class="about-tag">Wildlife</span>
-        <span class="about-tag">Astrophotography</span>
-        <span class="about-tag">Pacific Northwest</span>
-        <span class="about-tag">Oregon</span>
-        <span class="about-tag">Fine Art Prints</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SHOP -->
-<section id="shop">
-  <div class="shop-header">
-    <div class="section-label">Shop</div>
-    <h2 class="section-title">Fine Art <em>Prints</em></h2>
-    <p style="color:var(--mist); max-width:450px; line-height:1.7; font-size:0.9rem; margin-top:0.5rem;">Museum-quality giclée prints on archival paper. Each print is signed and numbered — limited editions only.</p>
-  </div>
     <div class="shop-grid">
-    <div class="shop-item">
-      <div class="shop-item-img">
-        <img src="photos/Dog_mountain_spooky.jpg" alt="Dog Mountain Storm print" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+      <div class="shop-item">
+        <div class="shop-item-img">
+          <img src="photos/Dog_mountain_spooky.jpg" alt="Dog Mountain Storm print"
+            style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+        </div>
+        <div class="shop-item-info">
+          <div class="shop-item-name">Dog Mountain Storm</div>
+          <div class="shop-item-meta">Columbia River Gorge · Limited Edition of 25</div>
+          <div class="shop-item-footer">
+            <div class="shop-item-price">$225</div>
+            <button class="shop-buy-btn">Add to Cart</button>
+          </div>
+        </div>
       </div>
-      <div class="shop-item-info">
-        <div class="shop-item-name">Dog Mountain Storm</div>
-        <div class="shop-item-meta">Columbia River Gorge · Limited Edition of 25</div>
-        <div class="shop-item-footer">
-          <div class="shop-item-price">$225</div>
-          <button class="shop-buy-btn">Add to Cart</button>
+      <div class="shop-item">
+        <div class="shop-item-img">
+          <img src="photos/Gorge_arch.jpg" alt="Through the Gate print"
+            style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+        </div>
+        <div class="shop-item-info">
+          <div class="shop-item-name">Through the Gate</div>
+          <div class="shop-item-meta">Multnomah Falls · Limited Edition of 25</div>
+          <div class="shop-item-footer">
+            <div class="shop-item-price">$240</div>
+            <button class="shop-buy-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="shop-item">
+        <div class="shop-item-img">
+          <img src="photos/multnomah_falls1.jpg" alt="Multnomah Falls print"
+            style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+        </div>
+        <div class="shop-item-info">
+          <div class="shop-item-name">Multnomah Falls</div>
+          <div class="shop-item-meta">Columbia Gorge · Open Edition</div>
+          <div class="shop-item-footer">
+            <div class="shop-item-price">$185</div>
+            <button class="shop-buy-btn">Add to Cart</button>
+          </div>
         </div>
       </div>
     </div>
-    <div class="shop-item">
-      <div class="shop-item-img">
-        <img src="photos/Gorge_arch.jpg" alt="Through the Gate print" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
-      </div>
-      <div class="shop-item-info">
-        <div class="shop-item-name">Through the Gate</div>
-        <div class="shop-item-meta">Multnomah Falls · Limited Edition of 25</div>
-        <div class="shop-item-footer">
-          <div class="shop-item-price">$240</div>
-          <button class="shop-buy-btn">Add to Cart</button>
-        </div>
-      </div>
+    <div style="text-align:center; margin-top:3rem;">
+      <p style="font-size:0.8rem; color:var(--mist); letter-spacing:0.1em; margin-bottom:1.5rem;">Digital downloads also
+        available · Instant delivery</p>
+      <a href="#contact" class="btn-primary">Custom Print Inquiries <span class="arrow">→</span></a>
     </div>
-    <div class="shop-item">
-      <div class="shop-item-img">
-        <img src="photos/multnomah_falls1.jpg" alt="Multnomah Falls print" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
-      </div>
-      <div class="shop-item-info">
-        <div class="shop-item-name">Multnomah Falls</div>
-        <div class="shop-item-meta">Columbia Gorge · Open Edition</div>
-        <div class="shop-item-footer">
-          <div class="shop-item-price">$185</div>
-          <button class="shop-buy-btn">Add to Cart</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div style="text-align:center; margin-top:3rem;">
-    <p style="font-size:0.8rem; color:var(--mist); letter-spacing:0.1em; margin-bottom:1.5rem;">Digital downloads also available · Instant delivery</p>
-    <a href="#contact" class="btn-primary">Custom Print Inquiries <span class="arrow">→</span></a>
-  </div>
-</section>
+  </section>
 
-<!-- LOCATIONS -->
-<section style="padding:8rem 3rem;">
-  <div id="locations">
-    <div class="section-label">Explore</div>
-    <h2 class="section-title">Featured<br><em>Locations</em></h2>
-    <div class="location-list">
-      <div class="location-row">
-        <span class="location-num">01</span>
-        <div class="location-thumb">
-          <img src="photos/Gorge_river2.jpg" alt="Columbia River Gorge">
+  <!-- LOCATIONS -->
+  <section style="padding:8rem 3rem;">
+    <div id="locations">
+      <div class="section-label">Explore</div>
+      <h2 class="section-title">Featured<br><em>Locations</em></h2>
+      <div class="location-list">
+        <div class="location-row">
+          <span class="location-num">01</span>
+          <div class="location-thumb">
+            <img src="photos/Gorge_river2.jpg" alt="Columbia River Gorge">
+          </div>
+          <span class="location-name">Columbia River Gorge</span>
+          <span class="location-type">Landscape</span>
+          <span class="location-arrow">→</span>
         </div>
-        <span class="location-name">Columbia River Gorge</span>
-        <span class="location-type">Landscape</span>
-        <span class="location-arrow">→</span>
-      </div>
-      <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;" class="location-photos" id="photos-01">
-        <img src="photos/Gorge_river2.jpg" alt="Gorge River" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/eagle_creek_falls.jpg" alt="Eagle Creek Falls" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/river_shot.jpg" alt="River Shot" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/Rocky_cliff.jpg" alt="Rocky Cliff" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-      </div>
-      <div class="location-row">
-        <span class="location-num">02</span>
-        <div class="location-thumb">
-          <img src="photos/waterfall_big.jpg" alt="PNW Waterfalls">
+        <div
+          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          class="location-photos" id="photos-01">
+          <img src="photos/Gorge_river2.jpg" alt="Gorge River"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/eagle_creek_falls.jpg" alt="Eagle Creek Falls"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/river_shot.jpg" alt="River Shot"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/Rocky_cliff.jpg" alt="Rocky Cliff"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         </div>
-        <span class="location-name">PNW Waterfalls</span>
-        <span class="location-type">Waterfall · Canyon</span>
-        <span class="location-arrow">→</span>
-      </div>
-      <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;" class="location-photos" id="photos-02">
-        <img src="photos/waterfall_big.jpg" alt="Waterfall Big" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/Waterfall2.jpg" alt="Waterfall 2" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/waterfall3.jpg" alt="Waterfall 3" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/waterfall6.jpg" alt="Waterfall 6" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/weaterfall5.jpg" alt="Waterfall 5" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/small_waterfall.jpg" alt="Small Waterfall" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/eagle_creek_falls.jpg" alt="Eagle Creek Falls" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-      </div>
-      <div class="location-row">
-        <span class="location-num">03</span>
-        <span class="location-name">Oregon Coast</span>
-        <span class="location-type">Coastal · Seascape</span>
-        <span class="location-arrow">→</span>
-      </div>
-      <div class="location-row">
-        <span class="location-num">04</span>
-        <div class="location-thumb">
-          <img src="photos/wild_flowerrs_+_mt_hood.jpg" alt="Mt. Hood Wilderness">
+        <div class="location-row">
+          <span class="location-num">02</span>
+          <div class="location-thumb">
+            <img src="photos/waterfall_big.jpg" alt="PNW Waterfalls">
+          </div>
+          <span class="location-name">PNW Waterfalls</span>
+          <span class="location-type">Waterfall · Canyon</span>
+          <span class="location-arrow">→</span>
         </div>
-        <span class="location-name">Mt. Hood Wilderness</span>
-        <span class="location-type">Mountain · Glacier</span>
-        <span class="location-arrow">→</span>
-      </div>
-      <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;" class="location-photos" id="photos-04">
-        <img src="photos/wild_flowerrs_+_mt_hood.jpg" alt="Wildflowers and Mt Hood" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/wildflowers3.jpg" alt="Wildflowers" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/wild_flowers4.jpg" alt="Wild Flowers" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/Summit.jpg" alt="Summit View" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-      </div>
-      <div class="location-row">
-        <span class="location-num">05</span>
-        <span class="location-name">Painted Hills</span>
-        <span class="location-type">High Desert</span>
-        <span class="location-arrow">→</span>
-      </div>
-      <div class="location-row">
-        <span class="location-num">06</span>
-        <span class="location-name">Smith Rock State Park</span>
-        <span class="location-type">Rock · River</span>
-        <span class="location-arrow">→</span>
-      </div>
-      <div class="location-row">
-        <span class="location-num">07</span>
-        <div class="location-thumb">
-          <img src="photos/red_sand_river.jpg" alt="Gorge Rivers">
+        <div
+          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          class="location-photos" id="photos-02">
+          <img src="photos/waterfall_big.jpg" alt="Waterfall Big"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/Waterfall2.jpg" alt="Waterfall 2"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/waterfall3.jpg" alt="Waterfall 3"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/waterfall6.jpg" alt="Waterfall 6"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/weaterfall5.jpg" alt="Waterfall 5"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/small_waterfall.jpg" alt="Small Waterfall"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/eagle_creek_falls.jpg" alt="Eagle Creek Falls"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         </div>
-        <span class="location-name">Gorge Rivers</span>
-        <span class="location-type">River · Canyon</span>
-        <span class="location-arrow">→</span>
-      </div>
-      <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;" class="location-photos" id="photos-07">
-        <img src="photos/red_sand_river.jpg" alt="Red Sand River" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/river_reflection.jpg" alt="River Reflection" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/river_2.jpg" alt="River" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/Gorge_river1.jpg" alt="Gorge River" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <div class="location-row">
+          <span class="location-num">03</span>
+          <span class="location-name">Oregon Coast</span>
+          <span class="location-type">Coastal · Seascape</span>
+          <span class="location-arrow">→</span>
+        </div>
+        <div class="location-row">
+          <span class="location-num">04</span>
+          <div class="location-thumb">
+            <img src="photos/wild_flowerrs_+_mt_hood.jpg" alt="Mt. Hood Wilderness">
+          </div>
+          <span class="location-name">Mt. Hood Wilderness</span>
+          <span class="location-type">Mountain · Glacier</span>
+          <span class="location-arrow">→</span>
+        </div>
+        <div
+          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          class="location-photos" id="photos-04">
+          <img src="photos/wild_flowerrs_+_mt_hood.jpg" alt="Wildflowers and Mt Hood"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/wildflowers3.jpg" alt="Wildflowers"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/wild_flowers4.jpg" alt="Wild Flowers"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/Summit.jpg" alt="Summit View"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        </div>
+        <div class="location-row">
+          <span class="location-num">05</span>
+          <span class="location-name">Painted Hills</span>
+          <span class="location-type">High Desert</span>
+          <span class="location-arrow">→</span>
+        </div>
+        <div class="location-row">
+          <span class="location-num">06</span>
+          <span class="location-name">Smith Rock State Park</span>
+          <span class="location-type">Rock · River</span>
+          <span class="location-arrow">→</span>
+        </div>
+        <div class="location-row">
+          <span class="location-num">07</span>
+          <div class="location-thumb">
+            <img src="photos/red_sand_river.jpg" alt="Gorge Rivers">
+          </div>
+          <span class="location-name">Gorge Rivers</span>
+          <span class="location-type">River · Canyon</span>
+          <span class="location-arrow">→</span>
+        </div>
+        <div
+          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          class="location-photos" id="photos-07">
+          <img src="photos/red_sand_river.jpg" alt="Red Sand River"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/river_reflection.jpg" alt="River Reflection"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/river_2.jpg" alt="River"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/Gorge_river1.jpg" alt="Gorge River"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="contact-inner" style="max-width:700px;">
-    <div class="section-label">Work With Me</div>
-    <h2 class="section-title" style="margin-bottom:1rem;">Let's <em>Shoot</em></h2>
-    <p class="contact-lead">Available for concert photography, sports events, and press credential requests. Based in Oregon — willing to travel. Every inquiry is read personally.</p>
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner" style="max-width:700px;">
+      <div class="section-label">Work With Me</div>
+      <h2 class="section-title" style="margin-bottom:1rem;">Let's <em>Shoot</em></h2>
+      <p class="contact-lead">Available for concert photography, sports events, and press credential requests. Based in
+        Oregon — willing to travel. Every inquiry is read personally.</p>
 
-    <!-- Inquiry type tabs -->
-    <div style="display:flex; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap;">
-      <button class="filter-btn active" onclick="switchForm('hire', this)">Hire Me</button>
-      <button class="filter-btn" onclick="switchForm('press', this)">Press Pass Request</button>
-      <button class="filter-btn" onclick="switchForm('print', this)">Prints / Licensing</button>
-    </div>
-
-    <!-- HIRE FORM -->
-    <form id="form-hire" class="contact-form" action="https://formspree.io/f/meerzkap" method="POST">
-      <input type="hidden" name="inquiry_type" value="Hire — Concert / Sports Photography">
-      <div class="form-row">
-        <div class="form-field">
-          <label>Your Name *</label>
-          <input type="text" name="name" placeholder="Full name" required>
-        </div>
-        <div class="form-field">
-          <label>Email *</label>
-          <input type="email" name="email" placeholder="your@email.com" required>
-        </div>
+      <!-- Inquiry type tabs -->
+      <div style="display:flex; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap;">
+        <button class="filter-btn active" onclick="switchForm('hire', this)">Hire Me</button>
+        <button class="filter-btn" onclick="switchForm('press', this)">Press Pass Request</button>
+        <button class="filter-btn" onclick="switchForm('print', this)">Prints / Licensing</button>
       </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>Phone</label>
-          <input type="tel" name="phone" placeholder="(503) 555-0000">
+
+      <!-- HIRE FORM -->
+      <form id="form-hire" class="contact-form" action="https://formspree.io/f/meerzkap" method="POST">
+        <input type="hidden" name="inquiry_type" value="Hire — Concert / Sports Photography">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Your Name *</label>
+            <input type="text" name="name" placeholder="Full name" required>
+          </div>
+          <div class="form-field">
+            <label>Email *</label>
+            <input type="email" name="email" placeholder="your@email.com" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Phone</label>
+            <input type="tel" name="phone" placeholder="(503) 555-0000">
+          </div>
+          <div class="form-field">
+            <label>Event Type *</label>
+            <select name="event_type" required>
+              <option value="">Select type</option>
+              <option>Concert / Music Festival</option>
+              <option>Sports — Live Game</option>
+              <option>Sports — Action / Portrait</option>
+              <option>Corporate Event</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Event Name / Artist</label>
+            <input type="text" name="event_name" placeholder="e.g. Portland Trail Blazers vs Lakers">
+          </div>
+          <div class="form-field">
+            <label>Event Date</label>
+            <input type="date" name="event_date">
+          </div>
         </div>
         <div class="form-field">
-          <label>Event Type *</label>
-          <select name="event_type" required>
+          <label>Venue / Location</label>
+          <input type="text" name="venue" placeholder="e.g. Moda Center, Portland OR">
+        </div>
+        <div class="form-field">
+          <label>How will the photos be used?</label>
+          <select name="usage">
+            <option value="">Select usage</option>
+            <option>Editorial / Press</option>
+            <option>Social Media</option>
+            <option>Commercial / Advertising</option>
+            <option>Personal Use</option>
+            <option>Multiple / Other</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Budget Range</label>
+            <select name="budget">
+              <option value="">Select range</option>
+              <option>Under $300</option>
+              <option>$300 – $600</option>
+              <option>$600 – $1,000</option>
+              <option>$1,000+</option>
+              <option>Let's discuss</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Organization / Publication</label>
+            <input type="text" name="organization" placeholder="e.g. Portland Tribune, Self">
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Additional Details</label>
+          <textarea rows="4" name="message"
+            placeholder="Anything else I should know — specific shots needed, access requirements, turnaround time..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Inquiry →</button>
+      </form>
+
+      <!-- PRESS PASS FORM -->
+      <form id="form-press" class="contact-form" action="https://formspree.io/f/meerzkap" method="POST"
+        style="display:none;">
+        <input type="hidden" name="inquiry_type" value="Press Pass / Credential Request">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Your Name *</label>
+            <input type="text" name="name" placeholder="Full name" required>
+          </div>
+          <div class="form-field">
+            <label>Email *</label>
+            <input type="email" name="email" placeholder="your@email.com" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Phone</label>
+            <input type="tel" name="phone" placeholder="(503) 555-0000">
+          </div>
+          <div class="form-field">
+            <label>Publication / Outlet *</label>
+            <input type="text" name="publication" placeholder="e.g. Wildlens Collective LLC" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Event Name *</label>
+            <input type="text" name="event_name" placeholder="e.g. Foo Fighters at Moda Center" required>
+          </div>
+          <div class="form-field">
+            <label>Event Date *</label>
+            <input type="date" name="event_date" required>
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Venue & City *</label>
+          <input type="text" name="venue" placeholder="e.g. Moda Center, Portland OR" required>
+        </div>
+        <div class="form-field">
+          <label>Credential Type Needed</label>
+          <select name="credential_type">
             <option value="">Select type</option>
-            <option>Concert / Music Festival</option>
-            <option>Sports — Live Game</option>
-            <option>Sports — Action / Portrait</option>
-            <option>Corporate Event</option>
-            <option>Other</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>Event Name / Artist</label>
-          <input type="text" name="event_name" placeholder="e.g. Portland Trail Blazers vs Lakers">
-        </div>
-        <div class="form-field">
-          <label>Event Date</label>
-          <input type="date" name="event_date">
-        </div>
-      </div>
-      <div class="form-field">
-        <label>Venue / Location</label>
-        <input type="text" name="venue" placeholder="e.g. Moda Center, Portland OR">
-      </div>
-      <div class="form-field">
-        <label>How will the photos be used?</label>
-        <select name="usage">
-          <option value="">Select usage</option>
-          <option>Editorial / Press</option>
-          <option>Social Media</option>
-          <option>Commercial / Advertising</option>
-          <option>Personal Use</option>
-          <option>Multiple / Other</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>Budget Range</label>
-          <select name="budget">
-            <option value="">Select range</option>
-            <option>Under $300</option>
-            <option>$300 – $600</option>
-            <option>$600 – $1,000</option>
-            <option>$1,000+</option>
-            <option>Let's discuss</option>
+            <option>Photo Pit Access</option>
+            <option>Full Event Access</option>
+            <option>Press Box / Media Area</option>
+            <option>Field / Sideline Access</option>
+            <option>Backstage / All-Access</option>
           </select>
         </div>
         <div class="form-field">
-          <label>Organization / Publication</label>
-          <input type="text" name="organization" placeholder="e.g. Portland Tribune, Self">
+          <label>Intended Use of Photos *</label>
+          <select name="usage" required>
+            <option value="">Select usage</option>
+            <option>Editorial / Online Publication</option>
+            <option>Social Media — Wildlens Collective</option>
+            <option>Print Publication</option>
+            <option>Artist / Team Promotional</option>
+            <option>Multiple</option>
+          </select>
         </div>
-      </div>
-      <div class="form-field">
-        <label>Additional Details</label>
-        <textarea rows="4" name="message" placeholder="Anything else I should know — specific shots needed, access requirements, turnaround time..."></textarea>
-      </div>
-      <button type="submit" class="form-submit">Send Inquiry →</button>
-    </form>
+        <div class="form-field">
+          <label>Website / Portfolio Link</label>
+          <input type="url" name="portfolio" placeholder="https://wildlens-collective.netlify.app">
+        </div>
+        <div class="form-field">
+          <label>Additional Notes</label>
+          <textarea rows="4" name="message"
+            placeholder="Any additional context, previous credentials held, or special requirements..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Submit Request →</button>
+      </form>
 
-    <!-- PRESS PASS FORM -->
-    <form id="form-press" class="contact-form" action="https://formspree.io/f/meerzkap" method="POST" style="display:none;">
-      <input type="hidden" name="inquiry_type" value="Press Pass / Credential Request">
-      <div class="form-row">
-        <div class="form-field">
-          <label>Your Name *</label>
-          <input type="text" name="name" placeholder="Full name" required>
+      <!-- PRINTS FORM -->
+      <form id="form-print" class="contact-form" action="https://formspree.io/f/meerzkap" method="POST"
+        style="display:none;">
+        <input type="hidden" name="inquiry_type" value="Prints / Licensing">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Your Name *</label>
+            <input type="text" name="name" placeholder="Full name" required>
+          </div>
+          <div class="form-field">
+            <label>Email *</label>
+            <input type="email" name="email" placeholder="your@email.com" required>
+          </div>
         </div>
         <div class="form-field">
-          <label>Email *</label>
-          <input type="email" name="email" placeholder="your@email.com" required>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>Phone</label>
-          <input type="tel" name="phone" placeholder="(503) 555-0000">
-        </div>
-        <div class="form-field">
-          <label>Publication / Outlet *</label>
-          <input type="text" name="publication" placeholder="e.g. Wildlens Collective LLC" required>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>Event Name *</label>
-          <input type="text" name="event_name" placeholder="e.g. Foo Fighters at Moda Center" required>
+          <label>Inquiry Type</label>
+          <select name="print_type">
+            <option value="">Select</option>
+            <option>Fine Art Print Purchase</option>
+            <option>Digital Download / License</option>
+            <option>Commercial Licensing</option>
+            <option>Custom Print Size</option>
+            <option>Bulk / Wholesale</option>
+          </select>
         </div>
         <div class="form-field">
-          <label>Event Date *</label>
-          <input type="date" name="event_date" required>
+          <label>Which photo(s) are you interested in?</label>
+          <input type="text" name="photos" placeholder="e.g. Multnomah Falls, Gorge Summit Trail...">
         </div>
-      </div>
-      <div class="form-field">
-        <label>Venue & City *</label>
-        <input type="text" name="venue" placeholder="e.g. Moda Center, Portland OR" required>
-      </div>
-      <div class="form-field">
-        <label>Credential Type Needed</label>
-        <select name="credential_type">
-          <option value="">Select type</option>
-          <option>Photo Pit Access</option>
-          <option>Full Event Access</option>
-          <option>Press Box / Media Area</option>
-          <option>Field / Sideline Access</option>
-          <option>Backstage / All-Access</option>
-        </select>
-      </div>
-      <div class="form-field">
-        <label>Intended Use of Photos *</label>
-        <select name="usage" required>
-          <option value="">Select usage</option>
-          <option>Editorial / Online Publication</option>
-          <option>Social Media — Wildlens Collective</option>
-          <option>Print Publication</option>
-          <option>Artist / Team Promotional</option>
-          <option>Multiple</option>
-        </select>
-      </div>
-      <div class="form-field">
-        <label>Website / Portfolio Link</label>
-        <input type="url" name="portfolio" placeholder="https://wildlens-collective.netlify.app">
-      </div>
-      <div class="form-field">
-        <label>Additional Notes</label>
-        <textarea rows="4" name="message" placeholder="Any additional context, previous credentials held, or special requirements..."></textarea>
-      </div>
-      <button type="submit" class="form-submit">Submit Request →</button>
-    </form>
+        <div class="form-field">
+          <label>Message</label>
+          <textarea rows="4" name="message"
+            placeholder="Preferred size, quantity, intended use, any questions..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Inquiry →</button>
+      </form>
+      </form>
 
-    <!-- PRINTS FORM -->
-    <form id="form-print" class="contact-form" action="https://formspree.io/f/meerzkap" method="POST" style="display:none;">
-      <input type="hidden" name="inquiry_type" value="Prints / Licensing">
-      <div class="form-row">
-        <div class="form-field">
-          <label>Your Name *</label>
-          <input type="text" name="name" placeholder="Full name" required>
-        </div>
-        <div class="form-field">
-          <label>Email *</label>
-          <input type="email" name="email" placeholder="your@email.com" required>
-        </div>
+      <div style="margin-top:4rem; display:flex; justify-content:center; gap:3rem; flex-wrap:wrap;">
+        <a href="https://instagram.com/wildlenscollectivellc" target="_blank"
+          style="color:var(--mist); text-decoration:none; font-size:0.78rem; letter-spacing:0.25em; text-transform:uppercase; transition:color 0.2s;"
+          onmouseover="this.style.color='var(--sage)'" onmouseout="this.style.color='var(--mist)'">
+          Instagram ↗
+        </a>
+        <a href="/cdn-cgi/l/email-protection#493e20252d252c273a2a2625252c2a3d203f2c092e24282025672a2624"
+          style="color:var(--mist); text-decoration:none; font-size:0.78rem; letter-spacing:0.25em; text-transform:uppercase; transition:color 0.2s;"
+          onmouseover="this.style.color='var(--sage)'" onmouseout="this.style.color='var(--mist)'">
+          Email ↗
+        </a>
       </div>
-      <div class="form-field">
-        <label>Inquiry Type</label>
-        <select name="print_type">
-          <option value="">Select</option>
-          <option>Fine Art Print Purchase</option>
-          <option>Digital Download / License</option>
-          <option>Commercial Licensing</option>
-          <option>Custom Print Size</option>
-          <option>Bulk / Wholesale</option>
-        </select>
-      </div>
-      <div class="form-field">
-        <label>Which photo(s) are you interested in?</label>
-        <input type="text" name="photos" placeholder="e.g. Multnomah Falls, Gorge Summit Trail...">
-      </div>
-      <div class="form-field">
-        <label>Message</label>
-        <textarea rows="4" name="message" placeholder="Preferred size, quantity, intended use, any questions..."></textarea>
-      </div>
-      <button type="submit" class="form-submit">Send Inquiry →</button>
-    </form>
-    </form>
+    </div>
+  </section>
 
-    <div style="margin-top:4rem; display:flex; justify-content:center; gap:3rem; flex-wrap:wrap;">
-      <a href="https://instagram.com/wildlenscollectivellc" target="_blank" style="color:var(--mist); text-decoration:none; font-size:0.78rem; letter-spacing:0.25em; text-transform:uppercase; transition:color 0.2s;" onmouseover="this.style.color='var(--sage)'" onmouseout="this.style.color='var(--mist)'">
-        Instagram ↗
-      </a>
-      <a href="/cdn-cgi/l/email-protection#493e20252d252c273a2a2625252c2a3d203f2c092e24282025672a2624" style="color:var(--mist); text-decoration:none; font-size:0.78rem; letter-spacing:0.25em; text-transform:uppercase; transition:color 0.2s;" onmouseover="this.style.color='var(--sage)'" onmouseout="this.style.color='var(--mist)'">
-        Email ↗
-      </a>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">Wildlens<span>.</span></div>
+    <div class="footer-copy">© 2026 Wildlens Collective LLC · Oregon · All Rights Reserved</div>
+    <div class="footer-socials">
+      <a href="https://instagram.com/wildlenscollectivellc" target="_blank">Instagram</a>
+      <a href="#shop">Prints</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <div class="lightbox-close" onclick="closeLightbox()">Close ✕</div>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="" style="display:none;">
+    <div class="lightbox-caption" id="lightboxCaption"
+      style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--mist);letter-spacing:0.15em;text-align:center;">
     </div>
   </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-brand">Wildlens<span>.</span></div>
-  <div class="footer-copy">© 2026 Wildlens Collective LLC · Oregon · All Rights Reserved</div>
-  <div class="footer-socials">
-    <a href="https://instagram.com/wildlenscollectivellc" target="_blank">Instagram</a>
-    <a href="#shop">Prints</a>
-    <a href="#contact">Contact</a>
-  </div>
-</footer>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <script>
+    // Hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+    function closeMobileMenu() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
 
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <div class="lightbox-close" onclick="closeLightbox()">Close ✕</div>
-  <img class="lightbox-img" id="lightboxImg" src="" alt="" style="display:none;">
-  <div class="lightbox-caption" id="lightboxCaption" style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--mist);letter-spacing:0.15em;text-align:center;"></div>
-</div>
+    // Nav scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 80);
+    });
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // Hamburger menu
-  const hamburger = document.getElementById('hamburger');
-  const mobileMenu = document.getElementById('mobileMenu');
-  hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('open');
-    mobileMenu.classList.toggle('open');
-    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
-  });
-  function closeMobileMenu() {
-    hamburger.classList.remove('open');
-    mobileMenu.classList.remove('open');
-    document.body.style.overflow = '';
-  }
+    // Location row expand/collapse
+    function initLocationRows() {
+      document.querySelectorAll('.location-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const next = row.nextElementSibling;
+          if (next && next.classList.contains('location-photos')) {
+            const isOpen = next.style.maxHeight && next.style.maxHeight !== '0px';
+            document.querySelectorAll('.location-photos').forEach(p => { p.style.maxHeight = '0'; });
+            if (!isOpen) next.style.maxHeight = '600px';
+          }
+        });
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initLocationRows);
+    } else {
+      initLocationRows();
+    }
 
-  // Nav scroll effect
-  window.addEventListener('scroll', () => {
-    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 80);
-  });
+    // Gallery filter (visual only)
+    function filterGallery(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // In production: filter items by data-category attribute
+    }
 
-  // Location row expand/collapse
-  function initLocationRows() {
-    document.querySelectorAll('.location-row').forEach(row => {
-      row.addEventListener('click', () => {
-        const next = row.nextElementSibling;
-        if (next && next.classList.contains('location-photos')) {
-          const isOpen = next.style.maxHeight && next.style.maxHeight !== '0px';
-          document.querySelectorAll('.location-photos').forEach(p => { p.style.maxHeight = '0'; });
-          if (!isOpen) next.style.maxHeight = '600px';
+    // Lightbox
+    function openLightbox(title, imgSrc) {
+      const img = document.getElementById('lightboxImg');
+      img.src = imgSrc || '';
+      img.alt = title;
+      img.style.display = imgSrc ? 'block' : 'none';
+      document.getElementById('lightboxCaption').textContent = title;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    // Form tab switching
+    function switchForm(type, btn) {
+      document.querySelectorAll('#contact .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('form-hire').style.display = 'none';
+      document.getElementById('form-press').style.display = 'none';
+      document.getElementById('form-print').style.display = 'none';
+      const form = document.getElementById('form-' + type);
+      form.style.display = 'flex';
+      form.style.opacity = '1';
+      form.style.transform = 'none';
+    }
+
+    // Intersection Observer for reveal animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
         }
       });
     });
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLocationRows);
-  } else {
-    initLocationRows();
-  }
 
-  // Gallery filter (visual only)
-  function filterGallery(cat, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    // In production: filter items by data-category attribute
-  }
+    document.querySelectorAll('.gallery-item, .shop-item, .location-row, .about-text, .shop-header, .contact-inner').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  </script>
+</body>
 
-  // Lightbox
-  function openLightbox(title, imgSrc) {
-    const img = document.getElementById('lightboxImg');
-    img.src = imgSrc || '';
-    img.alt = title;
-    img.style.display = imgSrc ? 'block' : 'none';
-    document.getElementById('lightboxCaption').textContent = title;
-    document.getElementById('lightbox').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
-
-  // Form tab switching
-  function switchForm(type, btn) {
-    document.querySelectorAll('#contact .filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('form-hire').style.display = 'none';
-    document.getElementById('form-press').style.display = 'none';
-    document.getElementById('form-print').style.display = 'none';
-    const form = document.getElementById('form-' + type);
-    form.style.display = 'flex';
-    form.style.opacity = '1';
-    form.style.transform = 'none';
-  }
-
-  // Intersection Observer for reveal animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    }
+</html>
