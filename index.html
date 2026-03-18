@@ -409,6 +409,11 @@
       grid-row: span 1;
     }
 
+    .gallery-item:nth-child(8) {
+      grid-column: span 7;
+      grid-row: span 1;
+    }
+
     .gallery-item img {
       width: 100%;
       height: 100%;
@@ -583,7 +588,7 @@
 
     .shop-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 2px;
     }
 
@@ -1100,7 +1105,7 @@
       }
 
       .shop-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
       }
 
       .location-photos {
@@ -1282,6 +1287,15 @@
             </div>
           </div>
         </div>
+        <div class="gallery-item" data-category="coastal" onclick="openLightbox('Oregon Coast', 'photos/oregon coast/coast_best.jpg')">
+          <img src="photos/oregon coast/coast_best.jpg" alt="Oregon coastline — rugged Pacific shore">
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-info">
+              <h3>Oregon Coast</h3>
+              <p>Pacific Coast · Seascape</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div style="text-align:center; margin-top:3rem;">
@@ -1379,6 +1393,20 @@
           </div>
         </div>
       </div>
+      <div class="shop-item">
+        <div class="shop-item-img">
+          <img src="photos/oregon coast/coast_best.jpg" alt="Oregon Coast print"
+            style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+        </div>
+        <div class="shop-item-info">
+          <div class="shop-item-name">Oregon Coast</div>
+          <div class="shop-item-meta">Pacific Coastline · Limited Edition of 25</div>
+          <div class="shop-item-footer">
+            <div class="shop-item-price">$215</div>
+            <button class="shop-buy-btn" onclick="switchForm('print', document.querySelector('#contact .filter-btn:nth-child(3)'))">Inquire</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div style="text-align:center; margin-top:3rem;">
       <p style="font-size:0.8rem; color:var(--mist); letter-spacing:0.1em; margin-bottom:1.5rem;">Digital downloads also
@@ -1443,9 +1471,32 @@
         </div>
         <div class="location-row">
           <span class="location-num">03</span>
+          <div class="location-thumb">
+            <img src="photos/oregon coast/coast_lighthouse.jpg" alt="Oregon Coast Lighthouse">
+          </div>
           <span class="location-name">Oregon Coast</span>
           <span class="location-type">Coastal · Seascape</span>
           <span class="location-arrow">→</span>
+        </div>
+        <div
+          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          class="location-photos" id="photos-03">
+          <img src="photos/oregon coast/coast_best.jpg" alt="Oregon Coast"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/oregon coast/coast_lighthouse.jpg" alt="Coast Lighthouse"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/oregon coast/coast_sunset.jpg" alt="Coast Sunset"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/oregon coast/coast_lagoon.jpg" alt="Coast Lagoon"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/oregon coast/coast_lagoon2.jpg" alt="Coast Lagoon 2"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/oregon coast/coast_plane.jpg" alt="Coast from above"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/oregon coast/coast1.jpg" alt="Oregon Coast 1"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="photos/oregon coast/coast2.jpg" alt="Oregon Coast 2"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         </div>
         <div class="location-row">
           <span class="location-num">04</span>
