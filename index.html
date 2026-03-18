@@ -1499,9 +1499,32 @@
         </div>
         <div class="location-row">
           <span class="location-num">03</span>
+          <div class="location-thumb">
+            <img loading="lazy" src="oregon_coast/coast_lighthouse.jpg" alt="Oregon Coast Lighthouse">
+          </div>
           <span class="location-name">Oregon Coast</span>
           <span class="location-type">Coastal · Seascape</span>
           <span class="location-arrow">→</span>
+        </div>
+        <div
+          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          class="location-photos" id="photos-03">
+          <img loading="lazy" src="oregon_coast/coast3.jpg" alt="Rocky cove — Oregon Coast"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img loading="lazy" src="oregon_coast/coast_lighthouse.jpg" alt="Coast Lighthouse"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img loading="lazy" src="oregon_coast/coast_plane.jpg" alt="Aerial headland"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img loading="lazy" src="oregon_coast/coast_sunset.jpg" alt="Golden hour basalt"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img loading="lazy" src="oregon_coast/coast11.jpg" alt="Driftwood and basalt"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img loading="lazy" src="oregon_coast/coast7.jpg" alt="Sea stacks"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img loading="lazy" src="oregon_coast/coast4.jpg" alt="Sea stack surf"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img loading="lazy" src="oregon_coast/coast12.jpg" alt="Wave on basalt"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         </div>
         <div class="location-row">
           <span class="location-num">04</span>
@@ -1839,7 +1862,6 @@
       document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 80);
     });
 
-    // Location row expand/collapse
     function initLocationRows() {
       document.querySelectorAll('.location-row').forEach(row => {
         row.addEventListener('click', () => {
@@ -1849,10 +1871,12 @@
             document.querySelectorAll('.location-photos').forEach(p => { p.style.maxHeight = '0'; });
             if (!isOpen) {
               next.style.maxHeight = '600px';
-              // Force lazy images to load when revealed
-              next.querySelectorAll('img[loading="lazy"]').forEach(img => {
-                if (img.dataset.src) { img.src = img.dataset.src; }
+              // Force lazy images to load immediately when grid is revealed
+              next.querySelectorAll('img').forEach(img => {
                 img.removeAttribute('loading');
+                const src = img.src;
+                img.src = '';
+                img.src = src;
               });
             }
           }
