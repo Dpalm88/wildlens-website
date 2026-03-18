@@ -701,22 +701,86 @@
   .lightbox-ph p { font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sage); }
 
   /* ─── RESPONSIVE ─── */
+  /* ─── HAMBURGER ─── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    background: none;
+    border: none;
+    z-index: 200;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--snow);
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,15,14,0.98);
+    z-index: 150;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--snow);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--sage); }
+
   @media (max-width: 900px) {
     nav { padding: 1.25rem 1.5rem; }
     .nav-links { display: none; }
-    section { padding: 5rem 1.5rem; }
-    .hero { padding: 0 1.5rem 4rem; }
+    .hamburger { display: flex; }
+    section { padding: 4rem 1.25rem; }
+    .hero { padding: 0 1.25rem 3.5rem; }
+    .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
+    .section-title { font-size: clamp(2rem, 8vw, 3.5rem); }
+    .gallery-filters { gap: 0.35rem; }
+    .filter-btn { padding: 0.35rem 0.8rem; font-size: 0.68rem; }
     .gallery-grid {
       grid-template-columns: repeat(2, 1fr);
-      grid-auto-rows: 220px;
+      grid-auto-rows: 180px;
     }
     .gallery-item { grid-column: span 1 !important; grid-row: span 1 !important; }
     #about { grid-template-columns: 1fr; gap: 3rem; }
     .about-visual { order: -1; }
     .about-stat-bar { bottom: -1rem; right: 1rem; }
     .shop-grid { grid-template-columns: 1fr; }
+    .location-photos { grid-template-columns: repeat(2, 1fr) !important; }
+    .location-name { font-size: clamp(1.1rem, 5vw, 1.8rem); }
     footer { flex-direction: column; text-align: center; }
     .form-row { grid-template-columns: 1fr; }
+    .scroll-hint { display: none; }
+    .contact-inner { max-width: 100% !important; }
+  }
+
+  @media (max-width: 480px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+      grid-auto-rows: 260px;
+    }
+    .hero-title { font-size: clamp(2.8rem, 16vw, 4rem); }
+    .shop-item-img { aspect-ratio: 16/9; }
   }
 </style>
 </head>
@@ -732,7 +796,19 @@
     <li><a href="#locations">Locations</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#gallery" onclick="closeMobileMenu()">Gallery</a>
+  <a href="#about" onclick="closeMobileMenu()">About</a>
+  <a href="#shop" onclick="closeMobileMenu()">Prints</a>
+  <a href="#locations" onclick="closeMobileMenu()">Locations</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="home">
@@ -776,8 +852,8 @@
     </div>
 
     <div class="gallery-grid" id="galleryGrid">
-      <div class="gallery-item" onclick="openLightbox('Dog Mountain Storm', 'photos/Dog mountain spooky.jpeg')">
-        <img src="photos/Dog mountain spooky.jpeg" alt="Trail descending Dog Mountain with storm clouds over Columbia River">
+      <div class="gallery-item" onclick="openLightbox('Dog Mountain Storm', 'photos/Dog%20mountain%20spooky.jpeg')">
+        <img src="photos/Dog%20mountain%20spooky.jpeg" alt="Trail descending Dog Mountain with storm clouds over Columbia River">
         <div class="gallery-item-overlay">
           <div class="gallery-item-info">
             <h3>Dog Mountain Storm</h3>
@@ -785,14 +861,14 @@
           </div>
         </div>
       </div>
-      <div class="gallery-item" onclick="openLightbox('Through the Gate', 'photos/Gorge_arch.jpeg')">
-        <img src="photos/Gorge_arch.jpeg" alt="Multnomah Falls framed through mossy iron gate">
+      <div class="gallery-item" onclick="openLightbox('Through the Gate', 'photos/Gorge%20arch.jpeg')">
+        <img src="photos/Gorge%20arch.jpeg" alt="Multnomah Falls framed through mossy iron gate">
         <div class="gallery-item-overlay">
           <div class="gallery-item-info"><h3>Through the Gate</h3><p>Columbia Gorge · Waterfall</p></div>
         </div>
       </div>
-      <div class="gallery-item" onclick="openLightbox('Fern Trail', 'photos/Gorge_river1.jpeg')">
-        <img src="photos/Gorge_river1.jpeg" alt="Narrow fern-lined trail through mossy Douglas fir forest">
+      <div class="gallery-item" onclick="openLightbox('Fern Trail', 'photos/Gorge%20river1.jpeg')">
+        <img src="photos/Gorge%20river1.jpeg" alt="Narrow fern-lined trail through mossy Douglas fir forest">
         <div class="gallery-item-overlay">
           <div class="gallery-item-info"><h3>Fern Trail</h3><p>Columbia Gorge · Forest</p></div>
         </div>
@@ -803,20 +879,20 @@
           <div class="gallery-item-info"><h3>Multnomah Falls</h3><p>Columbia Gorge · Waterfall</p></div>
         </div>
       </div>
-      <div class="gallery-item" onclick="openLightbox('Wildflowers in Mist', 'photos/wildflowers_spooky.jpg')">
-        <img src="photos/wildflowers_spooky.jpg" alt="Yellow wildflowers on foggy hillside disappearing into mist">
+      <div class="gallery-item" onclick="openLightbox('Wildflowers in Mist', 'photos/wildflowers%20spooky.jpg')">
+        <img src="photos/wildflowers%20spooky.jpg" alt="Yellow wildflowers on foggy hillside disappearing into mist">
         <div class="gallery-item-overlay">
           <div class="gallery-item-info"><h3>Wildflowers in Mist</h3><p>Columbia Gorge · Flora</p></div>
         </div>
       </div>
-      <div class="gallery-item" onclick="openLightbox('Basalt & Mist', 'photos/rocky_spooky.jpeg')">
-        <img src="photos/rocky_spooky.jpeg" alt="Moody misty basalt rock formation in the Gorge">
+      <div class="gallery-item" onclick="openLightbox('Basalt & Mist', 'photos/rocky%20spooky.jpeg')">
+        <img src="photos/rocky%20spooky.jpeg" alt="Moody misty basalt rock formation in the Gorge">
         <div class="gallery-item-overlay">
           <div class="gallery-item-info"><h3>Basalt & Mist</h3><p>Columbia Gorge · Landscape</p></div>
         </div>
       </div>
-      <div class="gallery-item" onclick="openLightbox('Balsamroot & Hood', 'photos/wild_flowerrs___mt_hood.jpeg')">
-        <img src="photos/wild_flowerrs___mt_hood.jpeg" alt="Balsamroot wildflower meadow with Mt Hood in background">
+      <div class="gallery-item" onclick="openLightbox('Balsamroot & Hood', 'photos/wild%20flowerrs%20+%20mt%20hood.jpeg')">
+        <img src="photos/wild%20flowerrs%20+%20mt%20hood.jpeg" alt="Balsamroot wildflower meadow with Mt Hood in background">
         <div class="gallery-item-overlay">
           <div class="gallery-item-info"><h3>Balsamroot & Hood</h3><p>Columbia Gorge · Flora · Vista</p></div>
         </div>
@@ -872,7 +948,7 @@
     <div class="shop-grid">
     <div class="shop-item">
       <div class="shop-item-img">
-        <img src="photos/Dog mountain spooky.jpeg" alt="Dog Mountain Storm print" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+        <img src="photos/Dog%20mountain%20spooky.jpeg" alt="Dog Mountain Storm print" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
       </div>
       <div class="shop-item-info">
         <div class="shop-item-name">Dog Mountain Storm</div>
@@ -885,7 +961,7 @@
     </div>
     <div class="shop-item">
       <div class="shop-item-img">
-        <img src="photos/Gorge_arch.jpeg" alt="Through the Gate print" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+        <img src="photos/Gorge%20arch.jpeg" alt="Through the Gate print" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
       </div>
       <div class="shop-item-info">
         <div class="shop-item-name">Through the Gate</div>
@@ -925,35 +1001,35 @@
       <div class="location-row">
         <span class="location-num">01</span>
         <div class="location-thumb">
-          <img src="photos/Gorge_river2.jpeg" alt="Columbia River Gorge">
+          <img src="photos/Gorge%20river2.jpeg" alt="Columbia River Gorge">
         </div>
         <span class="location-name">Columbia River Gorge</span>
         <span class="location-type">Landscape</span>
         <span class="location-arrow">→</span>
       </div>
       <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;" class="location-photos" id="photos-01">
-        <img src="photos/Gorge_river2.jpeg" alt="Gorge River" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/eagle_creek_falls.jpeg" alt="Eagle Creek Falls" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/river_shot.jpeg" alt="River Shot" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/Rocky_cliff.jpeg" alt="Rocky Cliff" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <img src="photos/Gorge%20river2.jpeg" alt="Gorge River" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <img src="photos/eagle%20creek%20falls.jpeg" alt="Eagle Creek Falls" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <img src="photos/river%20shot.jpeg" alt="River Shot" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <img src="photos/Rocky%20cliff.jpeg" alt="Rocky Cliff" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
       </div>
       <div class="location-row">
         <span class="location-num">02</span>
         <div class="location-thumb">
-          <img src="photos/waterfall_big.jpeg" alt="PNW Waterfalls">
+          <img src="photos/waterfall%20big.jpeg" alt="PNW Waterfalls">
         </div>
         <span class="location-name">PNW Waterfalls</span>
         <span class="location-type">Waterfall · Canyon</span>
         <span class="location-arrow">→</span>
       </div>
       <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;" class="location-photos" id="photos-02">
-        <img src="photos/waterfall_big.jpeg" alt="Waterfall Big" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <img src="photos/waterfall%20big.jpeg" alt="Waterfall Big" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         <img src="photos/Waterfall2.jpeg" alt="Waterfall 2" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         <img src="photos/waterfall3.jpeg" alt="Waterfall 3" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         <img src="photos/waterfall6.jpeg" alt="Waterfall 6" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         <img src="photos/weaterfall5.jpeg" alt="Waterfall 5" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/small_waterfall.jpeg" alt="Small Waterfall" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/eagle_creek_falls.jpeg" alt="Eagle Creek Falls" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <img src="photos/small%20waterfall.jpeg" alt="Small Waterfall" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <img src="photos/eagle%20creek%20falls.jpeg" alt="Eagle Creek Falls" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
       </div>
       <div class="location-row">
         <span class="location-num">03</span>
@@ -964,16 +1040,16 @@
       <div class="location-row">
         <span class="location-num">04</span>
         <div class="location-thumb">
-          <img src="photos/wild_flowerrs___mt_hood.jpeg" alt="Mt. Hood Wilderness">
+          <img src="photos/wild%20flowerrs%20+%20mt%20hood.jpeg" alt="Mt. Hood Wilderness">
         </div>
         <span class="location-name">Mt. Hood Wilderness</span>
         <span class="location-type">Mountain · Glacier</span>
         <span class="location-arrow">→</span>
       </div>
       <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;" class="location-photos" id="photos-04">
-        <img src="photos/wild_flowerrs___mt_hood.jpeg" alt="Wildflowers and Mt Hood" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <img src="photos/wild%20flowerrs%20+%20mt%20hood.jpeg" alt="Wildflowers and Mt Hood" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         <img src="photos/wildflowers3.jpeg" alt="Wildflowers" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/wild_flowers4.jpeg" alt="Wild Flowers" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <img src="photos/wild%20flowers4.jpeg" alt="Wild Flowers" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         <img src="photos/Summit.jpeg" alt="Summit View" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
       </div>
       <div class="location-row">
@@ -991,20 +1067,20 @@
       <div class="location-row">
         <span class="location-num">07</span>
         <div class="location-thumb">
-          <img src="photos/waterfall_big.jpeg" alt="PNW Waterfalls">
+          <img src="photos/waterfall%20big.jpeg" alt="PNW Waterfalls">
         </div>
         <span class="location-name">PNW Waterfalls</span>
         <span class="location-type">Waterfall · Canyon</span>
         <span class="location-arrow">→</span>
       </div>
       <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;" class="location-photos" id="photos-07">
-        <img src="photos/waterfall_big.jpeg" alt="Waterfall Big" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <img src="photos/waterfall%20big.jpeg" alt="Waterfall Big" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         <img src="photos/Waterfall2.jpeg" alt="Waterfall 2" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         <img src="photos/waterfall3.jpeg" alt="Waterfall 3" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         <img src="photos/waterfall6.jpeg" alt="Waterfall 6" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         <img src="photos/weaterfall5.jpeg" alt="Waterfall 5" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/small_waterfall.jpeg" alt="Small Waterfall" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-        <img src="photos/eagle_creek_falls.jpeg" alt="Eagle Creek Falls" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <img src="photos/small%20waterfall.jpeg" alt="Small Waterfall" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+        <img src="photos/eagle%20creek%20falls.jpeg" alt="Eagle Creek Falls" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
       </div>
     </div>
   </div>
@@ -1238,8 +1314,22 @@
 </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // Location photo strip toggle
-  document.querySelectorAll('.location-row').forEach(row => {
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  function closeMobileMenu() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
     row.addEventListener('click', () => {
       const next = row.nextElementSibling;
       if (next && next.classList.contains('location-photos')) {
