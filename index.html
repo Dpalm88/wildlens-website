@@ -1847,7 +1847,14 @@
           if (next && next.classList.contains('location-photos')) {
             const isOpen = next.style.maxHeight && next.style.maxHeight !== '0px';
             document.querySelectorAll('.location-photos').forEach(p => { p.style.maxHeight = '0'; });
-            if (!isOpen) next.style.maxHeight = '600px';
+            if (!isOpen) {
+              next.style.maxHeight = '600px';
+              // Force lazy images to load when revealed
+              next.querySelectorAll('img[loading="lazy"]').forEach(img => {
+                if (img.dataset.src) { img.src = img.dataset.src; }
+                img.removeAttribute('loading');
+              });
+            }
           }
         });
       });
