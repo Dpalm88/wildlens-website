@@ -1331,18 +1331,23 @@
   });
 
   // Location row expand/collapse
-  document.querySelectorAll('.location-row').forEach(row => {
-    row.addEventListener('click', () => {
-      const next = row.nextElementSibling;
-      if (next && next.classList.contains('location-photos')) {
-        const isOpen = next.style.maxHeight && next.style.maxHeight !== '0px';
-        // Close all
-        document.querySelectorAll('.location-photos').forEach(p => { p.style.maxHeight = '0'; });
-        // Open this one if it was closed
-        if (!isOpen) next.style.maxHeight = '600px';
-      }
+  function initLocationRows() {
+    document.querySelectorAll('.location-row').forEach(row => {
+      row.addEventListener('click', () => {
+        const next = row.nextElementSibling;
+        if (next && next.classList.contains('location-photos')) {
+          const isOpen = next.style.maxHeight && next.style.maxHeight !== '0px';
+          document.querySelectorAll('.location-photos').forEach(p => { p.style.maxHeight = '0'; });
+          if (!isOpen) next.style.maxHeight = '600px';
+        }
+      });
     });
-  });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLocationRows);
+  } else {
+    initLocationRows();
+  }
 
   // Gallery filter (visual only)
   function filterGallery(cat, btn) {
