@@ -410,7 +410,12 @@
     }
 
     .gallery-item:nth-child(8) {
-      grid-column: span 7;
+      grid-column: span 4;
+      grid-row: span 1;
+    }
+
+    .gallery-item:nth-child(9) {
+      grid-column: span 8;
       grid-row: span 1;
     }
 
@@ -588,7 +593,7 @@
 
     .shop-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 2px;
     }
 
@@ -1296,6 +1301,15 @@
             </div>
           </div>
         </div>
+        <div class="gallery-item" data-category="mountains" onclick="openLightbox('Smith Rock — River Bend', 'smith_rock/smith1.jpg')">
+          <img src="smith_rock/smith1.jpg" alt="Smith Rock State Park — Crooked River winding through volcanic spires">
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-info">
+              <h3>Smith Rock — River Bend</h3>
+              <p>High Desert · Rock · River</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div style="text-align:center; margin-top:3rem;">
@@ -1403,7 +1417,21 @@
           <div class="shop-item-meta">Pacific Coastline · Limited Edition of 25</div>
           <div class="shop-item-footer">
             <div class="shop-item-price">$215</div>
-            <button class="shop-buy-btn" onclick="switchForm('print', document.querySelector('#contact .filter-btn:nth-child(3)'))">Inquire</button>
+            <button class="shop-buy-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'}); setTimeout(()=>switchForm('print', document.querySelector('#contact .filter-btn:nth-child(3)')),600);">Inquire</button>
+          </div>
+        </div>
+      </div>
+      <div class="shop-item">
+        <div class="shop-item-img">
+          <img src="smith_rock/smith1.jpg" alt="Smith Rock — River Bend print"
+            style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+        </div>
+        <div class="shop-item-info">
+          <div class="shop-item-name">Smith Rock — River Bend</div>
+          <div class="shop-item-meta">High Desert · Limited Edition of 25</div>
+          <div class="shop-item-footer">
+            <div class="shop-item-price">$230</div>
+            <button class="shop-buy-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'}); setTimeout(()=>switchForm('print', document.querySelector('#contact .filter-btn:nth-child(3)')),600);">Inquire</button>
           </div>
         </div>
       </div>
@@ -1471,32 +1499,9 @@
         </div>
         <div class="location-row">
           <span class="location-num">03</span>
-          <div class="location-thumb">
-            <img src="oregon_coast/coast_lighthouse.jpg" alt="Oregon Coast Lighthouse">
-          </div>
           <span class="location-name">Oregon Coast</span>
           <span class="location-type">Coastal · Seascape</span>
           <span class="location-arrow">→</span>
-        </div>
-        <div
-          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
-          class="location-photos" id="photos-03">
-          <img src="oregon_coast/coast_best.jpg" alt="Oregon Coast"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-          <img src="oregon_coast/coast_lighthouse.jpg" alt="Coast Lighthouse"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-          <img src="oregon_coast/coast_sunset.jpg" alt="Coast Sunset"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-          <img src="oregon_coast/coast_lagoon.jpg" alt="Coast Lagoon"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-          <img src="oregon_coast/coast_lagoon2.jpg" alt="Coast Lagoon 2"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-          <img src="oregon_coast/coast_plane.jpg" alt="Coast from above"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-          <img src="oregon_coast/coast1.jpg" alt="Oregon Coast 1"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
-          <img src="oregon_coast/coast2.jpg" alt="Oregon Coast 2"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         </div>
         <div class="location-row">
           <span class="location-num">04</span>
@@ -1527,9 +1532,26 @@
         </div>
         <div class="location-row">
           <span class="location-num">06</span>
+          <div class="location-thumb">
+            <img src="smith_rock/smith1.jpg" alt="Smith Rock State Park">
+          </div>
           <span class="location-name">Smith Rock State Park</span>
           <span class="location-type">Rock · River</span>
           <span class="location-arrow">→</span>
+        </div>
+        <div
+          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          class="location-photos" id="photos-06">
+          <img src="smith_rock/smith1.jpg" alt="Smith Rock River Bend"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="smith_rock/smith6.jpg" alt="Smith Rock with Cascades"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="smith_rock/smith7.jpg" alt="Smith Rock golden spires and river"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="smith_rock/smith3.jpg" alt="Smith Rock river level view"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+          <img src="smith_rock/smith2.jpg" alt="Smith Rock sheer rock face"
+            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
         </div>
         <div class="location-row">
           <span class="location-num">07</span>
