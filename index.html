@@ -16,9 +16,7 @@
       --sage: #6b8c6e;
       --mist: #b8c9bb;
       --snow: #eef2ee;
-      --rust: #c4622d;
       --gold: #d4a853;
-      --water: #3a5f6f;
     }
 
     *,
@@ -461,19 +459,6 @@
       margin-top: 0.25rem;
     }
 
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s ease;
-      filter: saturate(0.9) brightness(0.92);
-    }
-
-    .gallery-item:hover img {
-      transform: scale(1.05);
-      filter: saturate(1.1) brightness(1);
-    }
-
     /* ─── ABOUT ─── */
     #about {
       display: grid;
@@ -610,19 +595,6 @@
       overflow: hidden;
     }
 
-    .shop-ph {
-      width: 100%;
-      height: 100%;
-      transition: transform 0.5s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .shop-item:hover .shop-ph {
-      transform: scale(1.04);
-    }
-
     .shop-item-info {
       padding: 1.5rem;
       background: #0f1410;
@@ -682,8 +654,34 @@
       margin: 0 auto;
     }
 
-    .location-list {
-      margin-top: 3rem;
+    .location-list { margin-top: 3rem; }
+
+    .location-photos {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.5s ease;
+    }
+
+    .loc-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      filter: saturate(0.85) brightness(0.9);
+    }
+
+    .shop-item-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .shop-item:hover .shop-item-img img {
+      transform: scale(1.04);
     }
 
     .location-row {
@@ -961,26 +959,6 @@
       max-height: 85vh;
       object-fit: contain;
       display: block;
-    }
-
-    .lightbox-ph {
-      width: 60vw;
-      height: 70vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
-      color: var(--mist);
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .lightbox-ph p {
-      font-size: 0.8rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--sage);
     }
 
     /* ─── RESPONSIVE ─── */
@@ -1368,7 +1346,7 @@
       <div class="shop-item">
         <div class="shop-item-img">
           <img loading="lazy" src="photos/Dog_mountain_spooky.jpg" alt="Dog Mountain Storm print"
-            style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+            >
         </div>
         <div class="shop-item-info">
           <div class="shop-item-name">Dog Mountain Storm</div>
@@ -1382,7 +1360,7 @@
       <div class="shop-item">
         <div class="shop-item-img">
           <img loading="lazy" src="photos/Gorge_arch.jpg" alt="Through the Gate print"
-            style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+            >
         </div>
         <div class="shop-item-info">
           <div class="shop-item-name">Through the Gate</div>
@@ -1396,7 +1374,7 @@
       <div class="shop-item">
         <div class="shop-item-img">
           <img loading="lazy" src="photos/multnomah_falls1.jpg" alt="Multnomah Falls print"
-            style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+            >
         </div>
         <div class="shop-item-info">
           <div class="shop-item-name">Multnomah Falls</div>
@@ -1410,7 +1388,7 @@
       <div class="shop-item">
         <div class="shop-item-img">
           <img loading="lazy" src="oregon_coast/coast_best.jpg" alt="Oregon Coast print"
-            style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+            >
         </div>
         <div class="shop-item-info">
           <div class="shop-item-name">Oregon Coast</div>
@@ -1424,7 +1402,7 @@
       <div class="shop-item">
         <div class="shop-item-img">
           <img loading="lazy" src="smith_rock/smith1.jpg" alt="Smith Rock — River Bend print"
-            style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+            >
         </div>
         <div class="shop-item-info">
           <div class="shop-item-name">Smith Rock — River Bend</div>
@@ -1459,16 +1437,16 @@
           <span class="location-arrow">→</span>
         </div>
         <div
-          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          
           class="location-photos" id="photos-01">
           <img loading="lazy" src="photos/Gorge_river2.jpg" alt="Gorge River"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/eagle_creek_falls.jpg" alt="Eagle Creek Falls"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/river_shot.jpg" alt="River Shot"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/Rocky_cliff.jpg" alt="Rocky Cliff"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
         </div>
         <div class="location-row">
           <span class="location-num">02</span>
@@ -1480,22 +1458,22 @@
           <span class="location-arrow">→</span>
         </div>
         <div
-          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          
           class="location-photos" id="photos-02">
           <img loading="lazy" src="photos/waterfall_big.jpg" alt="Waterfall Big"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/Waterfall2.jpg" alt="Waterfall 2"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/waterfall3.jpg" alt="Waterfall 3"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/waterfall6.jpg" alt="Waterfall 6"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/weaterfall5.jpg" alt="Waterfall 5"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/small_waterfall.jpg" alt="Small Waterfall"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/eagle_creek_falls.jpg" alt="Eagle Creek Falls"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
         </div>
         <div class="location-row">
           <span class="location-num">03</span>
@@ -1507,24 +1485,24 @@
           <span class="location-arrow">→</span>
         </div>
         <div
-          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          
           class="location-photos" id="photos-03">
           <img loading="lazy" src="oregon_coast/coast3.jpg" alt="Rocky cove — Oregon Coast"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="oregon_coast/coast_lighthouse.jpg" alt="Coast Lighthouse"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="oregon_coast/coast_plane.jpg" alt="Aerial headland"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="oregon_coast/coast_sunset.jpg" alt="Golden hour basalt"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="oregon_coast/coast11.jpg" alt="Driftwood and basalt"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="oregon_coast/coast7.jpg" alt="Sea stacks"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="oregon_coast/coast4.jpg" alt="Sea stack surf"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="oregon_coast/coast12.jpg" alt="Wave on basalt"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
         </div>
         <div class="location-row">
           <span class="location-num">04</span>
@@ -1536,16 +1514,16 @@
           <span class="location-arrow">→</span>
         </div>
         <div
-          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          
           class="location-photos" id="photos-04">
           <img loading="lazy" src="photos/wild_flowerrs_+_mt_hood.jpg" alt="Wildflowers and Mt Hood"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/wildflowers3.jpg" alt="Wildflowers"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/wild_flowers4.jpg" alt="Wild Flowers"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/Summit.jpg" alt="Summit View"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
         </div>
         <div class="location-row">
           <span class="location-num">05</span>
@@ -1563,18 +1541,18 @@
           <span class="location-arrow">→</span>
         </div>
         <div
-          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          
           class="location-photos" id="photos-06">
           <img loading="lazy" src="smith_rock/smith1.jpg" alt="Smith Rock River Bend"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="smith_rock/smith6.jpg" alt="Smith Rock with Cascades"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="smith_rock/smith7.jpg" alt="Smith Rock golden spires and river"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="smith_rock/smith3.jpg" alt="Smith Rock river level view"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="smith_rock/smith2.jpg" alt="Smith Rock sheer rock face"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
         </div>
         <div class="location-row">
           <span class="location-num">07</span>
@@ -1586,16 +1564,16 @@
           <span class="location-arrow">→</span>
         </div>
         <div
-          style="display:grid; grid-template-columns: repeat(4,1fr); gap:4px; margin-bottom:1rem; overflow:hidden; max-height:0; transition:max-height 0.5s ease;"
+          
           class="location-photos" id="photos-07">
           <img loading="lazy" src="photos/red_sand_river.jpg" alt="Red Sand River"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/river_reflection.jpg" alt="River Reflection"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/river_2.jpg" alt="River"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
           <img loading="lazy" src="photos/Gorge_river1.jpg" alt="Gorge River"
-            style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(0.85) brightness(0.9);">
+            class="loc-img">
         </div>
       </div>
     </div>
@@ -1841,7 +1819,6 @@
   </div>
 
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script>
     // Hamburger menu
     const hamburger = document.getElementById('hamburger');
@@ -1883,17 +1860,15 @@
         });
       });
     }
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initLocationRows);
-    } else {
-      initLocationRows();
-    }
+    document.addEventListener('DOMContentLoaded', initLocationRows);
 
-    // Gallery filter (visual only)
     function filterGallery(cat, btn) {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.gallery-filters .filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      // In production: filter items by data-category attribute
+      document.querySelectorAll('.gallery-item').forEach(item => {
+        const match = cat === 'all' || item.dataset.category === cat;
+        item.style.display = match ? '' : 'none';
+      });
     }
 
     // Lightbox
@@ -1915,14 +1890,10 @@
     // Form tab switching
     function switchForm(type, btn) {
       document.querySelectorAll('#contact .filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('form-hire').style.display = 'none';
-      document.getElementById('form-press').style.display = 'none';
-      document.getElementById('form-print').style.display = 'none';
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('.contact-form').forEach(f => f.style.display = 'none');
       const form = document.getElementById('form-' + type);
-      form.style.display = 'flex';
-      form.style.opacity = '1';
-      form.style.transform = 'none';
+      if (form) { form.style.display = 'flex'; form.style.opacity = '1'; }
     }
 
     // Intersection Observer for reveal animations
