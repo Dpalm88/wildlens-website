@@ -29,6 +29,8 @@
 
     html {
       scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
 
     body {
@@ -38,6 +40,8 @@
       font-weight: 300;
       overflow-x: hidden;
       cursor: crosshair;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     /* ─── NAV ─── */
@@ -842,6 +846,8 @@
       outline: none;
       resize: none;
       -webkit-appearance: none;
+      min-height: 44px;
+      width: 100%;
     }
 
     .form-field input:focus,
@@ -1143,11 +1149,19 @@
 
       .gallery-grid {
         grid-template-columns: 1fr;
-        grid-auto-rows: 260px;
+        grid-auto-rows: unset;
+      }
+
+      .gallery-item {
+        aspect-ratio: 4/3;
       }
 
       .shop-grid {
         grid-template-columns: 1fr;
+      }
+
+      .location-photos {
+        grid-template-columns: 1fr !important;
       }
 
       .shop-item-img {
@@ -1262,7 +1276,7 @@
 
       <div class="gallery-grid" id="galleryGrid">
         <div class="gallery-item" data-category="coastal" onclick="openLightbox('Oregon Coast', 'oregon_coast/coast_best.jpg')">
-          <img loading="lazy" src="oregon_coast/coast_best.jpg" alt="Oregon coastline — rugged Pacific shore">
+          <img loading="eager" src="oregon_coast/coast_best.jpg" alt="Oregon coastline — rugged Pacific shore">
           <div class="gallery-item-overlay">
             <div class="gallery-item-info">
               <h3>Oregon Coast</h3>
@@ -1271,7 +1285,7 @@
           </div>
         </div>
         <div class="gallery-item" onclick="openLightbox('Through the Gate', 'photos/Gorge_arch.jpg')">
-          <img loading="lazy" src="photos/Gorge_arch.jpg" alt="Multnomah Falls framed through mossy iron gate">
+          <img loading="eager" src="photos/Gorge_arch.jpg" alt="Multnomah Falls framed through mossy iron gate">
           <div class="gallery-item-overlay">
             <div class="gallery-item-info">
               <h3>Through the Gate</h3>
@@ -1647,17 +1661,17 @@
         <div class="form-row">
           <div class="form-field">
             <label>Your Name *</label>
-            <input type="text" name="name" placeholder="Full name" required>
+            <input type="text" name="name" placeholder="Full name" required autocomplete="name">
           </div>
           <div class="form-field">
             <label>Email *</label>
-            <input type="email" name="email" placeholder="your@email.com" required>
+            <input type="email" name="email" placeholder="your@email.com" required autocomplete="email" inputmode="email">
           </div>
         </div>
         <div class="form-row">
           <div class="form-field">
             <label>Phone</label>
-            <input type="tel" name="phone" placeholder="(503) 555-0000">
+            <input type="tel" name="phone" placeholder="(503) 555-0000" autocomplete="tel" inputmode="tel">
           </div>
           <div class="form-field">
             <label>Event Type *</label>
@@ -1728,11 +1742,11 @@
         <div class="form-row">
           <div class="form-field">
             <label>Your Name *</label>
-            <input type="text" name="name" placeholder="Full name" required>
+            <input type="text" name="name" placeholder="Full name" required autocomplete="name">
           </div>
           <div class="form-field">
             <label>Email *</label>
-            <input type="email" name="email" placeholder="your@email.com" required>
+            <input type="email" name="email" placeholder="your@email.com" required autocomplete="email" inputmode="email">
           </div>
         </div>
         <div class="form-field">
