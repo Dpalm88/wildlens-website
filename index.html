@@ -1258,17 +1258,15 @@
         <button class="filter-btn" onclick="filterGallery('water', this)">Lakes & Rivers</button>
         <button class="filter-btn" onclick="filterGallery('forests', this)">Forests</button>
         <button class="filter-btn" onclick="filterGallery('coastal', this)">Coastal</button>
-        <button class="filter-btn" onclick="filterGallery('wildlife', this)">Wildlife</button>
       </div>
 
       <div class="gallery-grid" id="galleryGrid">
-        <div class="gallery-item" onclick="openLightbox('Dog Mountain Storm', 'photos/Dog_mountain_spooky.jpg')">
-          <img loading="lazy" src="photos/Dog_mountain_spooky.jpg"
-            alt="Trail descending Dog Mountain with storm clouds over Columbia River">
+        <div class="gallery-item" data-category="coastal" onclick="openLightbox('Oregon Coast', 'oregon_coast/coast_best.jpg')">
+          <img loading="lazy" src="oregon_coast/coast_best.jpg" alt="Oregon coastline — rugged Pacific shore">
           <div class="gallery-item-overlay">
             <div class="gallery-item-info">
-              <h3>Dog Mountain Storm</h3>
-              <p>Columbia River Gorge · Landscape</p>
+              <h3>Oregon Coast</h3>
+              <p>Pacific Coast · Seascape</p>
             </div>
           </div>
         </div>
@@ -1326,12 +1324,13 @@
             </div>
           </div>
         </div>
-        <div class="gallery-item" data-category="coastal" onclick="openLightbox('Oregon Coast', 'oregon_coast/coast_best.jpg')">
-          <img loading="lazy" src="oregon_coast/coast_best.jpg" alt="Oregon coastline — rugged Pacific shore">
+        <div class="gallery-item" onclick="openLightbox('Dog Mountain Storm', 'photos/Dog_mountain_spooky.jpg')">
+          <img loading="lazy" src="photos/Dog_mountain_spooky.jpg"
+            alt="Trail descending Dog Mountain with storm clouds over Columbia River">
           <div class="gallery-item-overlay">
             <div class="gallery-item-info">
-              <h3>Oregon Coast</h3>
-              <p>Pacific Coast · Seascape</p>
+              <h3>Dog Mountain Storm</h3>
+              <p>Columbia River Gorge · Landscape</p>
             </div>
           </div>
         </div>
@@ -1581,14 +1580,9 @@
           <img loading="lazy" src="photos/Summit.jpg" alt="Summit View"
             class="loc-img">
         </div>
+
         <div class="location-row">
           <span class="location-num">05</span>
-          <span class="location-name">Painted Hills</span>
-          <span class="location-type">High Desert</span>
-          <span class="location-arrow">→</span>
-        </div>
-        <div class="location-row">
-          <span class="location-num">06</span>
           <div class="location-thumb">
             <img loading="lazy" src="smith_rock/smith1.jpg" alt="Smith Rock State Park">
           </div>
@@ -1611,7 +1605,7 @@
             class="loc-img">
         </div>
         <div class="location-row">
-          <span class="location-num">07</span>
+          <span class="location-num">06</span>
           <div class="location-thumb">
             <img loading="lazy" src="photos/red_sand_river.jpg" alt="Gorge Rivers">
           </div>
