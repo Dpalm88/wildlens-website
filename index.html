@@ -1640,13 +1640,12 @@
     <div class="contact-inner" style="max-width:700px;">
       <div class="section-label">Work With Me</div>
       <h2 class="section-title" style="margin-bottom:1rem;">Let's <em>Shoot</em></h2>
-      <p class="contact-lead">Available for concert photography, sports events, and press credential requests. Based in
+      <p class="contact-lead">Available for concert photography and sports events. Based in
         Oregon — willing to travel. Every inquiry is read personally.</p>
 
       <!-- Inquiry type tabs -->
       <div style="display:flex; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap;">
         <button class="filter-btn active" onclick="switchForm('hire', this)">Hire Me</button>
-        <button class="filter-btn" onclick="switchForm('press', this)">Press Pass Request</button>
         <button class="filter-btn" onclick="switchForm('print', this)">Prints / Licensing</button>
       </div>
 
@@ -1728,78 +1727,6 @@
             placeholder="Anything else I should know — specific shots needed, access requirements, turnaround time..."></textarea>
         </div>
         <button type="submit" class="form-submit">Send Inquiry →</button>
-      </form>
-
-      <!-- PRESS PASS FORM -->
-      <form id="form-press" class="contact-form" action="https://formspree.io/f/meerzkap" method="POST"
-        style="display:none;">
-        <input type="hidden" name="inquiry_type" value="Press Pass / Credential Request">
-        <div class="form-row">
-          <div class="form-field">
-            <label>Your Name *</label>
-            <input type="text" name="name" placeholder="Full name" required>
-          </div>
-          <div class="form-field">
-            <label>Email *</label>
-            <input type="email" name="email" placeholder="your@email.com" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label>Phone</label>
-            <input type="tel" name="phone" placeholder="(503) 555-0000">
-          </div>
-          <div class="form-field">
-            <label>Publication / Outlet *</label>
-            <input type="text" name="publication" placeholder="e.g. Wildlens Collective LLC" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label>Event Name *</label>
-            <input type="text" name="event_name" placeholder="e.g. Foo Fighters at Moda Center" required>
-          </div>
-          <div class="form-field">
-            <label>Event Date *</label>
-            <input type="date" name="event_date" required>
-          </div>
-        </div>
-        <div class="form-field">
-          <label>Venue & City *</label>
-          <input type="text" name="venue" placeholder="e.g. Moda Center, Portland OR" required>
-        </div>
-        <div class="form-field">
-          <label>Credential Type Needed</label>
-          <select name="credential_type">
-            <option value="">Select type</option>
-            <option>Photo Pit Access</option>
-            <option>Full Event Access</option>
-            <option>Press Box / Media Area</option>
-            <option>Field / Sideline Access</option>
-            <option>Backstage / All-Access</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label>Intended Use of Photos *</label>
-          <select name="usage" required>
-            <option value="">Select usage</option>
-            <option>Editorial / Online Publication</option>
-            <option>Social Media — Wildlens Collective</option>
-            <option>Print Publication</option>
-            <option>Artist / Team Promotional</option>
-            <option>Multiple</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label>Website / Portfolio Link</label>
-          <input type="url" name="portfolio" placeholder="https://wildlens-collective.netlify.app">
-        </div>
-        <div class="form-field">
-          <label>Additional Notes</label>
-          <textarea rows="4" name="message"
-            placeholder="Any additional context, previous credentials held, or special requirements..."></textarea>
-        </div>
-        <button type="submit" class="form-submit">Submit Request →</button>
       </form>
 
       <!-- PRINTS FORM -->
